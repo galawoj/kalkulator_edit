@@ -1,0 +1,47 @@
+.crossSection {
+
+    background: url(https://img.freepik.com/darmowe-zdjecie/cementu-tekstury_1194-6070.jpg?w=826&t=st=1696183010~exp=1696183610~hmac=f498915c43f74b152bc1de7b61683c1371b6fdb13f9fb1abc1f7cd643ca54113);
+    /*Obraz autorstwa kues1 na Freepik*/
+    background-size: contain;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+margin:auto;
+min-height:200px;
+margin-top:20px;
+
+
+}
+
+.stirrup {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    height: 100%;
+    width: 100%;
+
+}
+
+.steel {
+    background-image: url(https://img.freepik.com/darmowe-zdjecie/plaskie-ulozenie-metalowej-powierzchni_23-2148796575.jpg?w=740&t=st=1696184568~exp=1696185168~hmac=58e180bfda530e3ed7a6b52c1ade2a0689d372c64f63cda428f677dc87ca3a26);
+    background-size: cover;
+   
+    border-radius: 100%;
+    
+
+}
+
+.results{
+    background: white;
+    opacity: 0.9;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    border-radius: 20px;
+
+
+    display:flex;
+    justify-content: center;
+    width:100%;
+    height:100%;
+    margin-top:20px;
+    
+
+}
+

@@ -1,0 +1,53 @@
+/*@keyframes opacity {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.one {
+  animation: opacity 0.3s ease-out 
+}
+.two {
+  animation: opacity  0.3s ease-out  0.3s
+}
+.three {
+  animation: opacity  0.3s ease-out  0.6s
+}
+*/
+.button {
+  text-align: center;
+  text-transform: capitalize;
+  opacity: 1;
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 120px;
+  height: 120px;
+  background: white;
+  border-radius: 20px;
+  border: 2px solid white;
+  box-shadow: inset rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  cursor: pointer;
+  transition: 0.6s ease-out;
+
+
+}
+
+
+.button:hover {
+  scale: 102%;
+  box-shadow: inset rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+.hidden {
+  opacity: 0;
+  filter: blur(2px);
+  cursor: auto;
+  z-index: -1;
+
+}
