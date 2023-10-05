@@ -56,15 +56,12 @@ select {
 
 
 
-.leftContainer h5 {
+h5 {
     position: absolute;
-
     display: inline-block;
     padding: 0px;
     background: white;
     opacity: 0.9;
     border-radius: 1px;
-
-    top: -11px;
-
+    top: -9px;
 }

@@ -1,13 +1,8 @@
 @keyframes opacity {
-  0% {
+ from {
     opacity: 0;
-  }
-
-  85% {
-    opacity: 0;
-  }
-
-  100% {
+ }
+to {
     opacity: 1;
   }
 }
@@ -15,13 +10,12 @@
 .leftContainer {
   opacity: 1;
   z-index: -1;
-  position: absolute;
+  
   background: transparent;
   width: 30%;
   height: 80%;
   min-width: 320px;
-
-  animation: opacity 2s ease-in;
+  animation: opacity 0.5s ease-in;
 }
 
 .rightContainer {
@@ -35,16 +29,14 @@
   background: transparent;
   width: 40%;
   height: 80%;
-
- 
-  animation: opacity 2s ease-in;
+  animation: opacity 0.3s ease-in;
 }
 
 .board {
   background: white;
   
   left: 0;
- position:absolute;
+
   min-height: 95.5%;
   width: 100%;
   opacity: 0.9;

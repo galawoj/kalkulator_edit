@@ -13,11 +13,17 @@ margin-top:20px;
 
 .stirrup {
     display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
+    flex-direction:column;
+    justify-content: flex-end;
     height: 100%;
     width: 100%;
 
+}
+.rowSteel{
+    width:100%;
+    display: flex;
+    justify-content: space-between;
+    
 }
 
 .steel {

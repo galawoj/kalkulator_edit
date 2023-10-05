@@ -1,21 +1,23 @@
-import styles from './IntroButtons.module.css'
+import Button from './Button'
 
 const IntroButtons = (props) => {  
- const introButtonHandler = props.onChangingClassHandler
+
     
 
 
     return (
         <>
-            <button  className={` ${styles.button} ${props.clicked&&styles.hidden}`}>
+            <Button  {...props}>
                 Steel member design
-            </button>
-            <button onClick={introButtonHandler} className={`${styles.button} ${props.clicked&&styles.hidden}`}>
+            </Button>
+
+            <Button onClick={props.onBeamDesignHandler} {...props}>
                 Beam design
-            </button>
-            <button  className={`${styles.button} ${props.clicked&&styles.hidden}`}>
+            </Button>
+            
+            <Button  {...props}>
                 Pad foundation design
-            </button>
+            </Button>
         </>
 
     )
