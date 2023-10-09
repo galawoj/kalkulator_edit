@@ -1,3 +1,4 @@
+import styles from './IntroButtons.module.css'
 import Button from './Button'
 
 const IntroButtons = (props) => {  
@@ -18,6 +19,7 @@ const IntroButtons = (props) => {
             <Button  {...props}>
                 Pad foundation design
             </Button>
+            <button className={styles.logout} onClick={props.logOutHandler}>Log Out</button>
         </>
 
     )
