@@ -1,0 +1,9 @@
+nav{
+    margin:10px;
+    width:auto;
+    display: flex;
+    flex-direction:column;
+    position:absolute;
+    right:0;
+    top:0;
+}

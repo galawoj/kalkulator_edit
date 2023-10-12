@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 
 
 
-const BeamDesign = () => {
+const BeamDesign = (props) => {
 
 
     const [dataElement, setDataElement] = useState({
@@ -29,6 +29,7 @@ const BeamDesign = () => {
         <>
             <LeftContainer setDataElement={setDataElement} dataElement={dataElement} />
             <RightContainer dataElement={dataElement} />
+            
         </>
 
     )
