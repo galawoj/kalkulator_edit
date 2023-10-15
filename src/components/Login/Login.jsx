@@ -4,18 +4,19 @@ import SignIn from './SignIn';
 
 
 const Login = (props) => {
-    const [typeForm,setTypeForm] =useState(false)
-const typeFormHandler = () =>{
-typeForm ? setTypeForm(false):setTypeForm(true)
-}
+    const [switchForm, setSwitchForm] = useState(false)
 
-return(
-<>
-{!typeForm ? <SignIn onTypeFormHandler={typeFormHandler} {...props}/>:<Registration onTypeFormHandler={typeFormHandler} {...props}/>}
+    const switchHandler = () => {
+        switchForm ? setSwitchForm(false) : setSwitchForm(true)
+    }
 
-</>
-    
-)
+    return (
+        <>
+            {!switchForm ? <SignIn onSwitchHandler={switchHandler} {...props} /> : <Registration onSwitchHandler={switchHandler} {...props} />}
+
+        </>
+
+    )
 
 
 }

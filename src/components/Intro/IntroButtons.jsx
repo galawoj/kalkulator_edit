@@ -3,20 +3,22 @@ import Button from './Button'
 
 const IntroButtons = (props) => {  
 
-    
+    const steelIsActive =false
+    const beamIsActive = true
+    const padIsActive =false
 
 
     return (
         <>
-            <Button  {...props}>
+            <Button isActive={steelIsActive}  {...props}>
                 Steel member design
             </Button>
 
-            <Button onClick={props.onBeamDesignHandler} {...props}>
+            <Button isActive={beamIsActive} onClick={props.onBeamDesignHandler} {...props}>
                 Beam design
             </Button>
             
-            <Button  {...props}>
+            <Button  isActive={padIsActive} {...props}>
                 Pad foundation design
             </Button>
             

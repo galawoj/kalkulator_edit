@@ -52,3 +52,19 @@
 
 }
 
+.inactive{
+  box-shadow: none;
+  background:rgba(255,255,255,0.45);
+  background-image: url('../../shopping-basket.png');
+  background-size: 25% ;
+  background-repeat: no-repeat;
+  background-position: bottom  right 10% ;
+  border:none;
+  
+}
+
+.inactive:hover {
+  scale: 100%;
+  box-shadow: none
+  
+}

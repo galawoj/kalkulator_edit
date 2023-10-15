@@ -54,6 +54,7 @@ const Registration = (props) => {
     return (
         <>
             <form onSubmit={submitHandler} className={styles.login}>
+            {props.registrationSuccesion&& <h4 className={styles.errorMessage}>Registration failed!</h4>}
                 <div
                     className={`${styles.control} ${emailIsValid === false ? styles.invalid : ''
                         }`}
@@ -86,7 +87,7 @@ const Registration = (props) => {
                     <button type="submit" disabled={!formIsValid}>
                         Register
                     </button>
-                    <button className={styles.typeFormButton}  onClick={props.onTypeFormHandler}>
+                    <button className={styles.typeFormButton}  onClick={props.onSwitchHandler}>
                         Sign in
                     </button>
                 </div>

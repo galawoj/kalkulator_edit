@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import {
-  createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   onAuthStateChanged,
-  signOut
-
+  createUserWithEmailAndPassword
 } from "firebase/auth";
 
-
+import { collection, addDoc,setDoc, doc } from "firebase/firestore"; 
+import {db} from './firebase'
 import { auth } from './firebase';
 import styles from './App.module.css';
 import IntroButtons from "./components/Intro/IntroButtons";
@@ -18,17 +17,62 @@ import Navigation from './components/Navigation/Navigation';
 function App() {
 
 
-
-
   const [beamClicked, setBeamClicked] = useState(false)
   const [hide, setHide] = useState(false)
   const [buttonClicked, setButtonClicked] = useState(false)
+  const [loginSuccesion,SetLoginSuccesion] = useState(false)
+  const [registrationSuccesion,setRegistrationSuccesion] = useState(false)
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [userInformation, setUserInformation] = useState(false)
 
 
+const newUser = async (user) =>{
+  const docRef = doc(db,"users",user.email);
+  const payload = {
+  'id':user.uid,
+  'email':user.email,
+  'subscriptions':{'steel':false, 'beam':false, 'pad':false}
+  }
+  await setDoc(docRef,payload)
+}
+
+  //Authentication handlers -START
+
+
+ const loginHandler = (enteredEmail, enteredPassword) => {
+
+    signInWithEmailAndPassword(auth, enteredEmail, enteredPassword)
+      .then((userCredential) => {
+        console.log(userCredential)
+        SetLoginSuccesion(false)
+  
+      })
+      .catch((error) => {
+        SetLoginSuccesion(error)
+      });
+  }
+
+const registerHandler = (enteredEmail, enteredPassword) => {
+
+    createUserWithEmailAndPassword(auth, enteredEmail, enteredPassword)
+      .then((userCredential) => { 
+        newUser(userCredential.user) 
+        console.log(userCredential)
+        setRegistrationSuccesion(false)
+       
+      })
+      .catch((error) => {
+        setRegistrationSuccesion(error)
+      });
+  }
+
+ //Authentication handlers -END
+
+
+
+
   useEffect(() => {
-    const storedUserLoggedInInformation = onAuthStateChanged(auth, (user) => {
+    const storedUserLoggedInformation = onAuthStateChanged(auth, (user) => {
       if (user) {
         setIsLoggedIn(user)
         setUserInformation(user)
@@ -38,53 +82,10 @@ function App() {
       }
     })
     return () => {
-      storedUserLoggedInInformation()
+      storedUserLoggedInformation()
     }
 
   })
-
-
-
-
-  const loginHandler = (enteredEmail, enteredPassword) => {
-
-    signInWithEmailAndPassword(auth, enteredEmail, enteredPassword)
-      .then((userCredential) => {
-        console.log(userCredential)
-      })
-      .catch((error) => {
-        console.log(error)
-      });
-  }
-
-  const registerHandler = (enteredEmail, enteredPassword) => {
-
-
-    createUserWithEmailAndPassword(auth, enteredEmail, enteredPassword)
-      .then((userCredential) => {
-        // Signed up 
-        console.log(userCredential)
-
-
-      })
-      .catch((error) => {
-        console.log(error)
-
-      });
-
-
-  }
-
-  const logOutHandler = () => {
-    signOut(auth).then(() => {
-      console.log('log out successful')
-      setIsLoggedIn(false)
-    }).catch(error => console.log(error))
-
-
-
-  }
-
 
 
   const beamDesignHandler = () => {
@@ -98,7 +99,7 @@ function App() {
     <>
       <div className={`${styles.container} ${hide && styles.fullscreen}`}>
         {!isLoggedIn ? (
-          <Login onLogin={loginHandler} onRegister={registerHandler} />
+          <Login loginSuccesion={loginSuccesion} registrationSuccesion={registrationSuccesion} onLogin={loginHandler} onRegister={registerHandler} />
         ) : (
           !hide && (
             <IntroButtons
@@ -114,7 +115,7 @@ function App() {
       {isLoggedIn && <Navigation
         buttonClicked={buttonClicked}
         user={userInformation}
-        logOutHandler={logOutHandler}
+        setIsLoggedIn={setIsLoggedIn}
         setButtonClicked={setButtonClicked}
         setHide={setHide}
         setBeamClicked={setBeamClicked}

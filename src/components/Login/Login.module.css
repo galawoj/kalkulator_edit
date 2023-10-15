@@ -73,6 +73,9 @@
     font-size: 9pt;
   }
 
- 
+  .errorMessage{
+    text-align: center;
+    color:rgb(241, 42, 42);
+  } 
   
 
