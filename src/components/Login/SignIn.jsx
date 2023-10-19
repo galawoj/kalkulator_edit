@@ -55,7 +55,7 @@ const SignIn = (props) => {
         <>
         
             <form onSubmit={submitHandler} className={styles.login}>
-            {props.loginSuccesion&& <h4 className={styles.errorMessage}>Login failed!</h4>}
+            {props.loginSucces&& <h4 className={styles.errorMessage}>Login failed!</h4>}
                 <div
                     className={`${styles.control} ${emailIsValid === false ? styles.invalid : ''
                         }`}

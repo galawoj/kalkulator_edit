@@ -54,7 +54,7 @@ const Registration = (props) => {
     return (
         <>
             <form onSubmit={submitHandler} className={styles.login}>
-            {props.registrationSuccesion&& <h4 className={styles.errorMessage}>Registration failed!</h4>}
+            {props.registrationSucces&& <h4 className={styles.errorMessage}>Registration failed!</h4>}
                 <div
                     className={`${styles.control} ${emailIsValid === false ? styles.invalid : ''
                         }`}

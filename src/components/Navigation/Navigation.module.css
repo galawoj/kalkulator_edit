@@ -1,11 +1,12 @@
-nav{
-    padding:10px;
-    width:auto;
-    flex-direction:column;
-    position:relative;
-    right:0;
-    top:0;
-}
-p{
+.navigation{
+    position: relative;
+    padding: 10px;
+    height:fit-content;
+    display: flex;
+    flex-direction: column;
     text-align: center;
+}
+
+.informations{
+    margin: 10px 0 10px 0
 }

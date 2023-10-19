@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
+
 import {
   signInWithEmailAndPassword,
   onAuthStateChanged,
   createUserWithEmailAndPassword
 } from "firebase/auth";
 
-import { collection, addDoc,setDoc, doc } from "firebase/firestore"; 
-import {db} from './firebase'
-import { auth } from './firebase';
+import { setDoc, doc, onSnapshot,getDoc } from "firebase/firestore";
+import { auth, db } from './firebase';
 import styles from './App.module.css';
 import IntroButtons from "./components/Intro/IntroButtons";
 import BeamDesign from "./components/BeamDesign/BeamDesign";
@@ -20,54 +20,58 @@ function App() {
   const [beamClicked, setBeamClicked] = useState(false)
   const [hide, setHide] = useState(false)
   const [buttonClicked, setButtonClicked] = useState(false)
-  const [loginSuccesion,SetLoginSuccesion] = useState(false)
-  const [registrationSuccesion,setRegistrationSuccesion] = useState(false)
+  const [loginSucces, setLoginSucces] = useState(false)
+  const [registrationSucces, setRegistrationSucces] = useState(false)
   const [isLoggedIn, setIsLoggedIn] = useState(false)
-  const [userInformation, setUserInformation] = useState(false)
+  const [subscriptions, setSubscriptions] = useState(false)
 
+  const userDocumentName = isLoggedIn.email
 
-const newUser = async (user) =>{
-  const docRef = doc(db,"users",user.email);
-  const payload = {
-  'id':user.uid,
-  'email':user.email,
-  'subscriptions':{'steel':false, 'beam':false, 'pad':false}
+  const newUser = async (user) => {
+
+    const docRef = doc(db, "users", `${user.email}`);
+    const payload = {
+      'id': user.uid,
+      'email': user.email,
+      'subscriptions': { 'steel': false, 'beam': false, 'pad': false }
+    }
+    await setDoc(docRef, payload)
   }
-  await setDoc(docRef,payload)
-}
+
 
   //Authentication handlers -START
 
 
- const loginHandler = (enteredEmail, enteredPassword) => {
+  const loginHandler = (enteredEmail, enteredPassword) => {
 
     signInWithEmailAndPassword(auth, enteredEmail, enteredPassword)
       .then((userCredential) => {
         console.log(userCredential)
-        SetLoginSuccesion(false)
-  
+        setLoginSucces(false)
+        setRegistrationSucces(false)
+
       })
       .catch((error) => {
-        SetLoginSuccesion(error)
+        setLoginSucces(error)
       });
   }
 
-const registerHandler = (enteredEmail, enteredPassword) => {
+  const registerHandler = (enteredEmail, enteredPassword) => {
 
     createUserWithEmailAndPassword(auth, enteredEmail, enteredPassword)
-      .then((userCredential) => { 
-        newUser(userCredential.user) 
+      .then((userCredential) => {
+        newUser(userCredential.user)
         console.log(userCredential)
-        setRegistrationSuccesion(false)
-       
+        setRegistrationSucces(false)
+        setLoginSucces(false)
+
       })
       .catch((error) => {
-        setRegistrationSuccesion(error)
+        setRegistrationSucces(error)
       });
   }
 
- //Authentication handlers -END
-
+  //Authentication handlers -END
 
 
 
@@ -75,17 +79,54 @@ const registerHandler = (enteredEmail, enteredPassword) => {
     const storedUserLoggedInformation = onAuthStateChanged(auth, (user) => {
       if (user) {
         setIsLoggedIn(user)
-        setUserInformation(user)
       } else {
         setIsLoggedIn(false)
-        setUserInformation(false)
       }
     })
-    return () => {
-      storedUserLoggedInformation()
-    }
-
+    return () => storedUserLoggedInformation()
   })
+
+  async function checkIfDocumentExists(docPath) {
+    const docRef = doc(db, docPath);
+  
+    const docSnap = await getDoc(docRef);
+  
+    if (docSnap.exists()) {
+
+
+
+      const unsub = onSnapshot(doc(db, "users", userDocumentName), (doc) => {
+        const userSubscriptions = doc.data().subscriptions
+  
+        setSubscriptions(userSubscriptions)
+        console.log(userSubscriptions)
+      },
+        err => {
+          // TODO: handle errors;
+        }
+      )
+      return () => unsub()
+    } else {
+      console.log("błąd")
+    }
+  }
+
+
+
+
+  useEffect(() => {
+    console.log(userDocumentName)
+
+
+    checkIfDocumentExists(`users/${userDocumentName}`)
+
+
+  }, [userDocumentName, isLoggedIn])
+
+
+
+
+
 
 
   const beamDesignHandler = () => {
@@ -95,15 +136,27 @@ const registerHandler = (enteredEmail, enteredPassword) => {
   }
 
 
+
+
+
+
   return (
     <>
       <div className={`${styles.container} ${hide && styles.fullscreen}`}>
         {!isLoggedIn ? (
-          <Login loginSuccesion={loginSuccesion} registrationSuccesion={registrationSuccesion} onLogin={loginHandler} onRegister={registerHandler} />
+          <Login
+            onSetLoginSucces={setLoginSucces}
+            onSetRegistrationSucces={setRegistrationSucces}
+            loginSucces={loginSucces}
+            registrationSucces={registrationSucces}
+            onLogin={loginHandler}
+            onRegister={registerHandler}
+          />
         ) : (
           !hide && (
             <IntroButtons
-
+              userDocumentName={userDocumentName}
+              userSubscriptions={subscriptions}
               onBeamDesignHandler={beamDesignHandler}
               buttonClicked={buttonClicked}
             />
@@ -113,13 +166,15 @@ const registerHandler = (enteredEmail, enteredPassword) => {
       </div>
 
       {isLoggedIn && <Navigation
+        userDocumentName={userDocumentName}
+        userSubscriptions={subscriptions}
         buttonClicked={buttonClicked}
-        user={userInformation}
+        user={isLoggedIn}
         setIsLoggedIn={setIsLoggedIn}
         setButtonClicked={setButtonClicked}
         setHide={setHide}
         setBeamClicked={setBeamClicked}
-        />}
+      />}
     </>
   );
 }

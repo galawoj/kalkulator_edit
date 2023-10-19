@@ -8,6 +8,9 @@ const Login = (props) => {
 
     const switchHandler = () => {
         switchForm ? setSwitchForm(false) : setSwitchForm(true)
+        props.onSetLoginSucces(false)
+        props.onSetRegistrationSucces(false)
+
     }
 
     return (
