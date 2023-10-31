@@ -10,7 +10,7 @@ const Material = (props) => {
 
         <>
             <form className={styles.section}>
-                <h5>Concrete Parameters</h5>
+            <div className={styles.header}><h5>Concrete Parameters</h5></div>
 
                 <SelectConcrete {...props} />
 
@@ -25,7 +25,7 @@ const Material = (props) => {
                 </div>
 
                 <div className={styles.section}>
-                    <h5> Long-term parameters</h5>
+                <div className={styles.header}><h5> Long-term parameters</h5></div>
                     <DataElementInput {...props} name={'Relative Humidty'} id={'RH'} description={'RH [%] = '} />
                     <DataElementInput {...props} name={'Age of concrete at loading t0'} id={'age_t0'} description={'days [%] = '} />
                 </div>
@@ -34,7 +34,7 @@ const Material = (props) => {
             </form>
 
             <form className={styles.section}>
-                <h5> Steel Parameters</h5>
+            <div className={styles.header}><h5> Steel Parameters</h5></div>
                 <SelectSteel {...props} />
 
                 <div className={styles.intersection}></div>

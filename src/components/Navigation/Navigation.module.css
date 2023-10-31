@@ -1,6 +1,8 @@
+
 .navigation{
+    
     position: relative;
-    padding: 10px;
+    padding: 20px;
     height:fit-content;
     display: flex;
     flex-direction: column;
@@ -9,4 +11,33 @@
 
 .informations{
     margin: 10px 0 10px 0
+}
+
+.subInfo{
+
+    box-sizing: border-box;
+    padding:10px;
+    margin:10px 0 ;
+height:110px;
+width:110px;
+border: 2px solid white;
+border-radius: 10px;
+display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    backdrop-filter: blur(2px);
+    background: rgba(255,255,255,0.45);
+
+
+}
+
+.unsubButton{
+    font-size: 8pt;
+    background-color: rgba(255, 255, 255, 0.253);
+    width:fit-content;
+    border:1px solid black;
+    cursor: pointer;
+    margin:0;
+    
 }

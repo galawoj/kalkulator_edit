@@ -1,8 +1,8 @@
 import { auth } from '../../firebase';
 import { signOut } from "firebase/auth";
-import SubButton from './SubButton'
-import styles from './Navigation.module.css'
 
+import styles from './Navigation.module.css'
+import SubInfo from './SubInfo';
 
 
 const Navigation = (props) => {
@@ -37,9 +37,9 @@ const Navigation = (props) => {
 
             <div className={styles.informations}>{`Hi ${userEmail.substr(0, userEmail.indexOf('@'))} !`}</div>
             <div className={styles.informations}><h4>Your subscriptions:</h4></div>
-            {props.userSubscriptions.steel&&(<SubButton {...props} subName={"steel"}>Steel Member Design</SubButton>)}
-            {props.userSubscriptions.beam&&(<SubButton {...props} subName={"beam"}>Beam Designer</SubButton>)}
-            {props.userSubscriptions.pad&&(<SubButton {...props} subName={"pad"}>Pad Foundation Design</SubButton>)}
+            {props.userSubscriptions.steel&&(<SubInfo {...props} subName={"steel"}>Steel Member Design</SubInfo>)}
+            {props.userSubscriptions.beam&&(<SubInfo {...props} subName={"beam"}>Beam Designer</SubInfo>)}
+            {props.userSubscriptions.pad&&(<SubInfo {...props} subName={"pad"}>Pad Foundation Design</SubInfo>)}
             
         </nav>
 

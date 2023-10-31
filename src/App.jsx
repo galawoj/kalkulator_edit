@@ -73,7 +73,7 @@ function App() {
 
   //Authentication handlers -END
 
-
+ 
 
   useEffect(() => {
     const storedUserLoggedInformation = onAuthStateChanged(auth, (user) => {
@@ -86,48 +86,37 @@ function App() {
     return () => storedUserLoggedInformation()
   })
 
-  async function checkIfDocumentExists(docPath) {
-    const docRef = doc(db, docPath);
-  
-    const docSnap = await getDoc(docRef);
-  
-    if (docSnap.exists()) {
-
-
-
-      const unsub = onSnapshot(doc(db, "users", userDocumentName), (doc) => {
-        const userSubscriptions = doc.data().subscriptions
-  
-        setSubscriptions(userSubscriptions)
-        console.log(userSubscriptions)
-      },
-        err => {
-          // TODO: handle errors;
-        }
-      )
-      return () => unsub()
-    } else {
-      console.log("błąd")
-    }
-  }
-
-
-
+ //set state of subscriptions - START
 
   useEffect(() => {
-    console.log(userDocumentName)
-
+    
+    // function to check if document exist -START
+    async function checkIfDocumentExists(docPath) {
+      const docRef = doc(db, docPath);
+    
+      const docSnap = await getDoc(docRef);
+    
+      if (docSnap.exists()) {
+        const unsub = onSnapshot(doc(db, "users", userDocumentName), (doc) => {
+          const userSubscriptions = doc.data().subscriptions
+          setSubscriptions(userSubscriptions)
+          
+        },
+          err => {
+            console.log("error")
+          }
+        )
+        return () => unsub()
+      }
+      
+    }
+// function to check if document exist - END
 
     checkIfDocumentExists(`users/${userDocumentName}`)
 
-
   }, [userDocumentName, isLoggedIn])
 
-
-
-
-
-
+//set state of subscriptions - END
 
   const beamDesignHandler = () => {
     setButtonClicked(true)                         //rozmycie buttonów
@@ -137,7 +126,9 @@ function App() {
 
 
 
-
+useEffect(()=>{
+console.log(subscriptions)
+},[subscriptions])
 
 
   return (

@@ -10,7 +10,7 @@ const IntroButtons = (props) => {
         <>
             <Button isActive={props.userSubscriptions.steel} subName={"steel"}  {...props}>
                 Steel member design
-            </Button>
+           </Button>
 
             <Button isActive={props.userSubscriptions.beam} subName={"beam"} onClick={props.onBeamDesignHandler} {...props}>
                 Beam design
