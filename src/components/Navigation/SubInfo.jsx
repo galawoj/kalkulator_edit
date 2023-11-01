@@ -13,21 +13,19 @@ const SubInfo = (props) => {
 
     const timeOfSubscription = 30 * miliseconsPerDay //ms
 
-    const endSubscriptionDate = new Date(startSubscriptionDate + timeOfSubscription)
+    const endSubscriptionDate = startSubscriptionDate + timeOfSubscription
 
-    console.log(endSubscriptionDate)
-
-
+    const subscriptionLeft = props.loginTime ? Math.round((endSubscriptionDate - props.loginTime.toDate().getTime())/miliseconsPerDay) : 0
 
 
-    //.toJSON().slice(0, 10)
+
 
 
     return (
         <div className={styles.subInfo}>
-            <h5>{props.children}</h5>
-            <div>end of sub:</div>
-            <div>{endSubscriptionDate.toJSON().slice(0, 10)}</div>
+            <h4>{props.children}</h4>
+            <div>Left: <b style={{'color':"red"}}>{subscriptionLeft} days</b></div>
+            
             <SubButton {...props}>Delete</SubButton>
 
         </div>

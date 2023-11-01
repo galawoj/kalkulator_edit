@@ -6,7 +6,7 @@ import {
   createUserWithEmailAndPassword
 } from "firebase/auth";
 
-import { setDoc, doc, onSnapshot,getDoc } from "firebase/firestore";
+import { setDoc, doc, onSnapshot,getDoc,updateDoc,serverTimestamp} from "firebase/firestore";
 import { auth, db } from './firebase';
 import styles from './App.module.css';
 import IntroButtons from "./components/Intro/IntroButtons";
@@ -24,6 +24,7 @@ function App() {
   const [registrationSucces, setRegistrationSucces] = useState(false)
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [subscriptions, setSubscriptions] = useState(false)
+  const [loginTime, setLoginTime] = useState(false)
 
   const userDocumentName = isLoggedIn.email
 
@@ -33,7 +34,9 @@ function App() {
     const payload = {
       'id': user.uid,
       'email': user.email,
-      'subscriptions': { 'steel': false, 'beam': false, 'pad': false }
+      'subscriptions': { 'steel': null, 'beam': null, 'pad': null },
+      
+
     }
     await setDoc(docRef, payload)
   }
@@ -73,18 +76,28 @@ function App() {
 
   //Authentication handlers -END
 
+
  
 
   useEffect(() => {
-    const storedUserLoggedInformation = onAuthStateChanged(auth, (user) => {
+    
+   const storedUserLoggedInformation = onAuthStateChanged(auth, (user) => {
+      
+      console.log(user)
       if (user) {
         setIsLoggedIn(user)
       } else {
         setIsLoggedIn(false)
-      }
+      }      
     })
-    return () => storedUserLoggedInformation()
-  })
+
+
+
+   return () => storedUserLoggedInformation()
+
+
+  },[])
+  
 
  //set state of subscriptions - START
 
@@ -95,24 +108,39 @@ function App() {
       const docRef = doc(db, docPath);
     
       const docSnap = await getDoc(docRef);
+
+
     
       if (docSnap.exists()) {
+
+        const update = updateDoc(doc(db, "users", userDocumentName),{
+          'startSession':serverTimestamp()
+          
+          })
+
         const unsub = onSnapshot(doc(db, "users", userDocumentName), (doc) => {
           const userSubscriptions = doc.data().subscriptions
           setSubscriptions(userSubscriptions)
-          
+          const startSession = doc.data().startSession
+          setLoginTime(startSession)
         },
           err => {
             console.log("error")
           }
         )
-        return () => unsub()
+
+        return () => {
+          update()
+          unsub()
+
+        }
       }
       
     }
 // function to check if document exist - END
 
     checkIfDocumentExists(`users/${userDocumentName}`)
+    console.log(loginTime)
 
   }, [userDocumentName, isLoggedIn])
 
@@ -157,6 +185,7 @@ console.log(subscriptions)
       </div>
 
       {isLoggedIn && <Navigation
+        loginTime={loginTime}
         userDocumentName={userDocumentName}
         userSubscriptions={subscriptions}
         buttonClicked={buttonClicked}

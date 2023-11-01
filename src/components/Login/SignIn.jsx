@@ -89,7 +89,7 @@ const SignIn = (props) => {
                         Sign in
                     </button>
                     <button className={styles.typeFormButton}  onClick={props.onSwitchHandler}>
-                        Create an account
+                        New here? Register!
                     </button>
                 </div>
             </form>

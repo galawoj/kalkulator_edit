@@ -1,3 +1,5 @@
+
+
 import { auth } from '../../firebase';
 import { signOut } from "firebase/auth";
 
@@ -7,12 +9,17 @@ import SubInfo from './SubInfo';
 
 const Navigation = (props) => {
 
+
+
+
+
+
     const userEmail = props.user.email
 
     const closerHandler = () => {
         props.setHide(false)
         props.setBeamClicked(false)
-        setTimeout(() => { props.setButtonClicked(false) }, 800)  //fade-in buttonów
+        setTimeout(() => {props.setButtonClicked(false)}, 800)  //fade-in buttonów
     }
 
     const logOutHandler = () => {

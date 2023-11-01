@@ -17,9 +17,9 @@
 
     box-sizing: border-box;
     padding:10px;
-    margin:10px 0 ;
-height:110px;
-width:110px;
+    margin:10px 0;
+height:120px;
+width:120px;
 border: 2px solid white;
 border-radius: 10px;
 display: flex;

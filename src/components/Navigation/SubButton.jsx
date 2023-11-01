@@ -5,14 +5,14 @@ import styles from "./Navigation.module.css"
 const SubButton = (props) =>{
 
     
-   const updateSubHandler = async()=>{
+   const updateSubHandler = async () =>{
 
     
     // Create an initial document to update.
     const docRef =  doc(db, "users", `${props.userDocumentName}`);
 
     await updateDoc(docRef, {
-        [`subscriptions.${props.subName}`]: false
+        [`subscriptions.${props.subName}`]: null
     });
     }
 
