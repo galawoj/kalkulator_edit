@@ -3,10 +3,11 @@ import React, { useState, useEffect } from 'react';
 import {
   signInWithEmailAndPassword,
   onAuthStateChanged,
-  createUserWithEmailAndPassword
+  createUserWithEmailAndPassword,
+  signOut
 } from "firebase/auth";
 
-import { setDoc, doc, onSnapshot,getDoc,updateDoc,serverTimestamp} from "firebase/firestore";
+import { setDoc, doc, onSnapshot, getDoc, updateDoc, serverTimestamp } from "firebase/firestore";
 import { auth, db } from './firebase';
 import styles from './App.module.css';
 import IntroButtons from "./components/Intro/IntroButtons";
@@ -35,7 +36,7 @@ function App() {
       'id': user.uid,
       'email': user.email,
       'subscriptions': { 'steel': null, 'beam': null, 'pad': null },
-      
+
 
     }
     await setDoc(docRef, payload)
@@ -49,7 +50,6 @@ function App() {
 
     signInWithEmailAndPassword(auth, enteredEmail, enteredPassword)
       .then((userCredential) => {
-        console.log(userCredential)
         setLoginSucces(false)
         setRegistrationSucces(false)
 
@@ -64,7 +64,6 @@ function App() {
     createUserWithEmailAndPassword(auth, enteredEmail, enteredPassword)
       .then((userCredential) => {
         newUser(userCredential.user)
-        console.log(userCredential)
         setRegistrationSucces(false)
         setLoginSucces(false)
 
@@ -77,74 +76,92 @@ function App() {
   //Authentication handlers -END
 
 
- 
+
 
   useEffect(() => {
-    
-   const storedUserLoggedInformation = onAuthStateChanged(auth, (user) => {
-      
-      console.log(user)
+
+    const storedUserLoggedInformation = onAuthStateChanged(auth, (user) => {
+
       if (user) {
         setIsLoggedIn(user)
       } else {
         setIsLoggedIn(false)
-      }      
+      }
     })
 
 
 
-   return () => storedUserLoggedInformation()
+    return () => storedUserLoggedInformation()
 
 
-  },[])
-  
+  }, [])
 
- //set state of subscriptions - START
+
+  async function checkIfDocumentExists(docPath) {
+    const docRef = doc(db, docPath);
+
+    const docSnap = await getDoc(docRef);
+
+
+    if (docSnap.exists()) {
+
+      const update = updateDoc(doc(db, "users", userDocumentName), {
+        'startSession': serverTimestamp()
+
+      })
+
+      const unsub = onSnapshot(doc(db, "users", userDocumentName), (doc) => {
+        const userSubscriptions = doc.data().subscriptions
+        setSubscriptions(userSubscriptions)
+
+        const startSession = doc.data().startSession
+        setLoginTime(startSession)
+
+      },
+        err => {
+          console.log("error")
+        }
+      )
+
+      return () => {
+        unsub()
+        update()
+      }
+    }
+  }
 
   useEffect(() => {
-    
-    // function to check if document exist -START
-    async function checkIfDocumentExists(docPath) {
-      const docRef = doc(db, docPath);
-    
-      const docSnap = await getDoc(docRef);
-
-
-    
-      if (docSnap.exists()) {
-
-        const update = updateDoc(doc(db, "users", userDocumentName),{
-          'startSession':serverTimestamp()
-          
-          })
-
-        const unsub = onSnapshot(doc(db, "users", userDocumentName), (doc) => {
-          const userSubscriptions = doc.data().subscriptions
-          setSubscriptions(userSubscriptions)
-          const startSession = doc.data().startSession
-          setLoginTime(startSession)
-        },
-          err => {
-            console.log("error")
-          }
-        )
-
-        return () => {
-          update()
-          unsub()
-
-        }
-      }
-      
-    }
-// function to check if document exist - END
 
     checkIfDocumentExists(`users/${userDocumentName}`)
-    console.log(loginTime)
 
   }, [userDocumentName, isLoggedIn])
 
-//set state of subscriptions - END
+
+  //timer of session
+  useEffect(() => {
+    if (isLoggedIn && loginTime) {
+      let t = 0
+      setInterval(() => {
+        t += 1
+
+
+          let timeSession = loginTime
+
+         timeSession = timeSession>0? loginTime.toDate().getTime() + t * 1000 : null
+          
+
+          if(t%10===0){
+            const update = updateDoc(doc(db, "users", userDocumentName), {
+              'startSession': new Date(timeSession)
+                  })
+          }
+
+
+      }, 1000)
+    }
+  })
+
+
 
   const beamDesignHandler = () => {
     setButtonClicked(true)                         //rozmycie buttonów
@@ -154,9 +171,6 @@ function App() {
 
 
 
-useEffect(()=>{
-console.log(subscriptions)
-},[subscriptions])
 
 
   return (
