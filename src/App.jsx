@@ -149,7 +149,7 @@ function App() {
 
          timeSession = timeSession>0? loginTime.toDate().getTime() + t * 1000 : null
           
-
+console.log(timeSession)
           if(t%10===0){
             const update = updateDoc(doc(db, "users", userDocumentName), {
               'startSession': new Date(timeSession)
