@@ -10,10 +10,12 @@ const Button = (props) => {
 
     const inactiveHandler = async () => {
 
+
+
         // Create an initial document to update.
         const docRef = doc(db, "users", `${props.userDocumentName}`);
-
         await updateDoc(docRef, {
+
             [`subscriptions.${props.subName}`]: serverTimestamp()
         });
 

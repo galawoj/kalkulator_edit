@@ -4,8 +4,7 @@ import {
   signInWithEmailAndPassword,
   onAuthStateChanged,
   createUserWithEmailAndPassword,
-  signOut
-} from "firebase/auth";
+  } from "firebase/auth";
 
 import { setDoc, doc, onSnapshot, getDoc, updateDoc, serverTimestamp } from "firebase/firestore";
 import { auth, db } from './firebase';
@@ -26,6 +25,7 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [subscriptions, setSubscriptions] = useState(false)
   const [loginTime, setLoginTime] = useState(false)
+
 
   const userDocumentName = isLoggedIn.email
 
@@ -49,7 +49,7 @@ function App() {
   const loginHandler = (enteredEmail, enteredPassword) => {
 
     signInWithEmailAndPassword(auth, enteredEmail, enteredPassword)
-      .then((userCredential) => {
+      .then(() => {
         setLoginSucces(false)
         setRegistrationSucces(false)
 
@@ -139,27 +139,29 @@ function App() {
 
   //timer of session
   useEffect(() => {
-    if (isLoggedIn && loginTime) {
-      let t = 0
-      setInterval(() => {
-        t += 1
+    
+      if (isLoggedIn && loginTime) {
+        let timeSession = loginTime
+        const timeUpdate=60*10 //s
+        let t = 0
+        
+        const timer = setInterval(() => {
+          t += 1
 
-
-          let timeSession = loginTime
-
-         timeSession = timeSession>0? loginTime.toDate().getTime() + t * 1000 : null
+          timeSession = timeSession > 0 ? loginTime.toDate().getTime() + t * 1000 : null
           
-console.log(timeSession)
-          if(t%10===0){
+          if (t % timeUpdate === 0) {
             const update = updateDoc(doc(db, "users", userDocumentName), {
               'startSession': new Date(timeSession)
-                  })
+            })
+
           }
 
-
-      }, 1000)
-    }
-  })
+        }, 1000)
+        return()=>clearInterval(timer)
+      }
+    
+  }, [loginTime,isLoggedIn])
 
 
 
@@ -199,6 +201,7 @@ console.log(timeSession)
       </div>
 
       {isLoggedIn && <Navigation
+
         loginTime={loginTime}
         userDocumentName={userDocumentName}
         userSubscriptions={subscriptions}

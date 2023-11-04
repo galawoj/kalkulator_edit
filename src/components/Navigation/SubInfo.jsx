@@ -1,4 +1,7 @@
+import React, {useEffect} from 'react'
 
+import { doc, updateDoc } from "firebase/firestore"; 
+import { db } from '../../firebase';
 
 import SubButton from "./SubButton"
 import styles from "./Navigation.module.css"
@@ -9,19 +12,30 @@ const SubInfo = (props) => {
 
     const startSubscriptionDate = props.userSubscriptions[props.subName].toDate().getTime()
 
-    const miliseconsPerDay = 24 * 3600 * 1000 //ms
+    const milisecondsPerDay = 24 * 3600 * 1000 //ms
 
-    const miliseconsPerHour = 3600 * 1000 //ms
+    const milisecondsPerHour = 3600 * 1000 //ms
 
-    const timeOfSubscription = 0.5 * miliseconsPerDay //ms
+    const daysOfSubscription = 30 * milisecondsPerDay //ms
 
-    const endSubscriptionDate = startSubscriptionDate + timeOfSubscription
+    const endSubscriptionDate = startSubscriptionDate + daysOfSubscription
 
-    const subscriptionLeftDays = props.loginTime ? Math.round((endSubscriptionDate - props.loginTime.toDate().getTime())/miliseconsPerDay) : 0
+    const subscriptionLeftDays = props.loginTime ? Math.round((endSubscriptionDate - props.loginTime.toDate().getTime())/milisecondsPerDay) : 0
 
-    const subscriptionLeftHours = props.loginTime ? Math.round((endSubscriptionDate - props.loginTime.toDate().getTime())/miliseconsPerHour) : 0
+    const subscriptionLeftHours = props.loginTime ? Math.round((endSubscriptionDate - props.loginTime.toDate().getTime())/milisecondsPerHour) : 0
+
+useEffect(()=>{
 
 
+const timeSession = props.loginTime? props.loginTime.toDate().getTime() :0
+if(timeSession>=endSubscriptionDate){
+    const update = updateDoc(doc(db, "users", props.userDocumentName), {
+        [`subscriptions.${props.subName}`]: null
+})
+}
+
+},[props.loginTime])
+    
 
     return (
         <div className={styles.subInfo}>
