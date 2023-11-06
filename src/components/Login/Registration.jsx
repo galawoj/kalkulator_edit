@@ -10,21 +10,26 @@ const Registration = (props) => {
     const [emailIsValid, setEmailIsValid] = useState();
     const [enteredPassword, setEnteredPassword] = useState('');
     const [passwordIsValid, setPasswordIsValid] = useState();
+    const [confirmIsValid, setConfirmIsValid] = useState();
+    const [enteredConfirmation, setEnteredConfirmation] = useState('');
     const [formIsValid, setFormIsValid] = useState(false);
+    
+    
+    
 
     useEffect(() => {
 
         const identifier = setTimeout(() => {
            
             setFormIsValid(
-                enteredEmail.includes('@') && enteredPassword.trim().length > 6
+                enteredEmail.includes('@') && enteredPassword.trim().length > 6 && enteredPassword===enteredConfirmation
             );
         }, 500);
 
         return () => {
             clearTimeout(identifier)
         }
-    }, [enteredPassword, enteredEmail])
+    }, [enteredPassword, enteredEmail,enteredConfirmation])
 
 
     const emailChangeHandler = (event) => {
@@ -38,12 +43,21 @@ const Registration = (props) => {
 
     };
 
+    const confirmChangeHandler = (event) => {
+        setEnteredConfirmation(event.target.value);
+
+    };
+
     const validateEmailHandler = () => {
         setEmailIsValid(enteredEmail.includes('@'));
     };
 
     const validatePasswordHandler = () => {
         setPasswordIsValid(enteredPassword.trim().length > 6);
+    };
+
+    const validateConfirmHandler = () => {
+        setConfirmIsValid(enteredConfirmation.trim().length > 6 && enteredConfirmation===enteredPassword);
     };
 
     const submitHandler = (event) => {
@@ -81,6 +95,20 @@ const Registration = (props) => {
                         value={enteredPassword}
                         onChange={passwordChangeHandler}
                         onBlur={validatePasswordHandler}
+                    />
+                </div>
+                <div
+                    className={`${styles.control} ${confirmIsValid === false ? styles.invalid : ''
+                        }`}
+                >
+                    <label htmlFor="confirm">Confirm password</label>
+                    <input
+                   
+                        type="password"
+                        id="confrim"
+                        value={enteredConfirmation}
+                        onChange={confirmChangeHandler}
+                        onBlur={validateConfirmHandler}
                     />
                 </div>
                 <div className={styles.actions}>

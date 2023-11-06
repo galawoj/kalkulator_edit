@@ -4,7 +4,9 @@ import {
   signInWithEmailAndPassword,
   onAuthStateChanged,
   createUserWithEmailAndPassword,
-  } from "firebase/auth";
+  sendEmailVerification,
+  signOut
+} from "firebase/auth";
 
 import { setDoc, doc, onSnapshot, getDoc, updateDoc, serverTimestamp } from "firebase/firestore";
 import { auth, db } from './firebase';
@@ -63,9 +65,16 @@ function App() {
 
     createUserWithEmailAndPassword(auth, enteredEmail, enteredPassword)
       .then((userCredential) => {
+
+        sendEmailVerification(auth.currentUser)
+          .then(() => {
+            alert('email verification link sent!')
+          })
+
         newUser(userCredential.user)
         setRegistrationSucces(false)
         setLoginSucces(false)
+        signOut(auth)
 
       })
       .catch((error) => {
@@ -82,10 +91,12 @@ function App() {
 
     const storedUserLoggedInformation = onAuthStateChanged(auth, (user) => {
 
-      if (user) {
+      if (user.emailVerified) {
         setIsLoggedIn(user)
+        console.log(user)
       } else {
         setIsLoggedIn(false)
+        
       }
     })
 
@@ -139,29 +150,28 @@ function App() {
 
   //timer of session
   useEffect(() => {
-    
-      if (isLoggedIn && loginTime) {
-        let timeSession = loginTime
-        const timeUpdate=60*10 //s
-        let t = 0
-        
-        const timer = setInterval(() => {
-          t += 1
 
-          timeSession = timeSession > 0 ? loginTime.toDate().getTime() + t * 1000 : null
-          
-          if (t % timeUpdate === 0) {
-            const update = updateDoc(doc(db, "users", userDocumentName), {
-              'startSession': new Date(timeSession)
-            })
+    if (isLoggedIn && loginTime) {
+      let timeSession = loginTime
+      const timeUpdate = 60 * 10 //s
+      let t = 0
 
-          }
+      const timer = setInterval(() => {
+        t += 1
 
-        }, 1000)
-        return()=>clearInterval(timer)
-      }
-    
-  }, [loginTime,isLoggedIn])
+        timeSession = timeSession > 0 ? loginTime.toDate().getTime() + t * 1000 : null
+
+        if (t % timeUpdate === 0) {
+          const update = updateDoc(doc(db, "users", userDocumentName), {
+            'startSession': new Date(timeSession)
+          })
+        }
+        console.log(timeSession)
+      }, 1000)
+      return () => clearInterval(timer)
+    }
+
+  }, [loginTime, isLoggedIn])
 
 
 
