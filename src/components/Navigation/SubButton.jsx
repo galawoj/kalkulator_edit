@@ -9,12 +9,14 @@ const SubButton = (props) =>{
 
     
     // Create an initial document to update.
-    const docRef =  doc(db, "users", `${props.userDocumentName}`);
+    const docRef =  doc(db, "users", `${props.userDocumentName}/subscriptionsCollection/subscriptions`);
 
     await updateDoc(docRef, {
-        [`subscriptions.${props.subName}`]: null
+        [`${props.subName}`]: null
     });
     }
+
+    
 
     return(
         <button className={styles.unsubButton} onClick={updateSubHandler}>

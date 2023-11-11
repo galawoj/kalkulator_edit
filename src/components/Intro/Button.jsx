@@ -13,10 +13,10 @@ const Button = (props) => {
 
 
         // Create an initial document to update.
-        const docRef = doc(db, "users", `${props.userDocumentName}`);
+        const docRef = doc(db, "users", `${props.userDocumentName}/subscriptionsCollection/subscriptions`);
         await updateDoc(docRef, {
 
-            [`subscriptions.${props.subName}`]: serverTimestamp()
+            [`${props.subName}`]: serverTimestamp()
         });
 
 

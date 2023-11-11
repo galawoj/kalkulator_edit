@@ -8,7 +8,16 @@ import {
   signOut
 } from "firebase/auth";
 
-import { setDoc, doc, onSnapshot, getDoc, updateDoc, serverTimestamp } from "firebase/firestore";
+import {
+  setDoc,
+  doc,
+  onSnapshot,
+  getDoc,
+  updateDoc,
+  serverTimestamp,
+  collection,
+  addDoc
+} from "firebase/firestore";
 import { auth, db } from './firebase';
 import styles from './App.module.css';
 import IntroButtons from "./components/Intro/IntroButtons";
@@ -27,21 +36,26 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [subscriptions, setSubscriptions] = useState(false)
   const [loginTime, setLoginTime] = useState(false)
-
+  const [sessionTime,setSessionTime] = useState(false)
 
   const userDocumentName = isLoggedIn.email
 
   const newUser = async (user) => {
 
+
     const docRef = doc(db, "users", `${user.email}`);
     const payload = {
       'id': user.uid,
       'email': user.email,
-      'subscriptions': { 'steel': null, 'beam': null, 'pad': null },
-
-
+     
     }
     await setDoc(docRef, payload)
+
+    const subscriptionsCollection = collection(docRef, "subscriptionsCollection");
+    const timerCollection = collection(docRef,"timerCollection")
+
+    await setDoc(doc(subscriptionsCollection,"subscriptions"), { 'steel': null, 'beam': null, 'pad': null });
+    await setDoc(doc(timerCollection,"timer"),{});
   }
 
 
@@ -91,80 +105,111 @@ function App() {
 
     const storedUserLoggedInformation = onAuthStateChanged(auth, (user) => {
 
-      if (user.emailVerified) {
-        setIsLoggedIn(user)
-        console.log(user)
+      if (user) {
+
+        if (user.emailVerified) {
+          setIsLoggedIn(user)
+          console.log(user)
+        } else {
+          setIsLoggedIn(false)
+        }
+
       } else {
         setIsLoggedIn(false)
-        
+
+      }
+    })
+
+    return () => storedUserLoggedInformation()
+  }, [])
+
+
+  useEffect(() => {
+
+    const docPath = `users/${userDocumentName}`
+
+    const docRef = doc(db, docPath);
+
+    getDoc(docRef).then(docSnap => {
+
+      if (docSnap.exists()) {
+
+        updateDoc(doc(db, "users", userDocumentName), {
+          'startSession': serverTimestamp()
+        })
+
+      }
+    })
+
+  }, [userDocumentName, isLoggedIn])
+
+
+
+  useEffect(() => {
+
+    const docPath = `users/${userDocumentName}/subscriptionsCollection/subscriptions`
+
+    const docRef = doc(db, docPath);
+
+    getDoc(docRef).then(docSnap => {
+
+      if (docSnap.exists()) {
+
+        const userSubscriptions = docSnap.data()
+        console.log(userSubscriptions)
+        setSubscriptions(userSubscriptions)
+
       }
     })
 
 
-
-    return () => storedUserLoggedInformation()
-
-
-  }, [])
-
-
-  async function checkIfDocumentExists(docPath) {
-    const docRef = doc(db, docPath);
-
-    const docSnap = await getDoc(docRef);
-
-
-    if (docSnap.exists()) {
-
-      const update = updateDoc(doc(db, "users", userDocumentName), {
-        'startSession': serverTimestamp()
-
-      })
-
-      const unsub = onSnapshot(doc(db, "users", userDocumentName), (doc) => {
-        const userSubscriptions = doc.data().subscriptions
-        setSubscriptions(userSubscriptions)
-
-        const startSession = doc.data().startSession
-        setLoginTime(startSession)
-
-      },
-        err => {
-          console.log("error")
-        }
-      )
-
-      return () => {
-        unsub()
-        update()
-      }
-    }
-  }
-
-  useEffect(() => {
-
-    checkIfDocumentExists(`users/${userDocumentName}`)
-
   }, [userDocumentName, isLoggedIn])
 
+
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      onSnapshot(doc(db, "users", `${userDocumentName}/subscriptionsCollection/subscriptions`), (doc) => {
+        setSubscriptions(doc.data())
+      });
+    }
+  }, [userDocumentName, isLoggedIn])
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      onSnapshot(doc(db, "users", userDocumentName), (doc) => {
+
+      const startSessionTimestamp = doc.data().startSession
+if (startSessionTimestamp){
+  setLoginTime(startSessionTimestamp)
+  setSessionTime(startSessionTimestamp.toDate().getTime())
+  console.log(startSessionTimestamp)
+}
+       
+      });
+    }
+  }, [userDocumentName, isLoggedIn])
 
   //timer of session
   useEffect(() => {
 
     if (isLoggedIn && loginTime) {
-      let timeSession = loginTime
-      const timeUpdate = 60 * 10 //s
+      let timeSession = loginTime.toDate().getTime()
+      const timeUpdate = 10 //s
       let t = 0
+
 
       const timer = setInterval(() => {
         t += 1
 
-        timeSession = timeSession > 0 ? loginTime.toDate().getTime() + t * 1000 : null
+        timeSession = timeSession > 0 ? timeSession + 1000 : null
 
         if (t % timeUpdate === 0) {
-          const update = updateDoc(doc(db, "users", userDocumentName), {
-            'startSession': new Date(timeSession)
+          updateDoc(doc(db, "users", `${userDocumentName}/timerCollection/timer`), {
+            'timeSession': new Date(timeSession)
           })
+          setSessionTime(timeSession)
+          console.log(timeSession)
         }
         console.log(timeSession)
       }, 1000)
@@ -211,8 +256,8 @@ function App() {
       </div>
 
       {isLoggedIn && <Navigation
-
-        loginTime={loginTime}
+        sessionTime={sessionTime}
+        
         userDocumentName={userDocumentName}
         userSubscriptions={subscriptions}
         buttonClicked={buttonClicked}

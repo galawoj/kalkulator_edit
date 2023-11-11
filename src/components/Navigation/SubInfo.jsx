@@ -9,6 +9,7 @@ import styles from "./Navigation.module.css"
 
 
 const SubInfo = (props) => {
+    
 
     const startSubscriptionDate = props.userSubscriptions[props.subName].toDate().getTime()
 
@@ -16,25 +17,25 @@ const SubInfo = (props) => {
 
     const milisecondsPerHour = 3600 * 1000 //ms
 
-    const daysOfSubscription = 30 * milisecondsPerDay //ms
+    const daysOfSubscription = 5000 //ms
 
     const endSubscriptionDate = startSubscriptionDate + daysOfSubscription
 
-    const subscriptionLeftDays = props.loginTime ? Math.round((endSubscriptionDate - props.loginTime.toDate().getTime())/milisecondsPerDay) : 0
+    const subscriptionLeftDays = props.sessionTime ? Math.round((endSubscriptionDate - props.sessionTime)/milisecondsPerDay) : 0
 
-    const subscriptionLeftHours = props.loginTime ? Math.round((endSubscriptionDate - props.loginTime.toDate().getTime())/milisecondsPerHour) : 0
+    const subscriptionLeftHours = props.sessionTime ? Math.round((endSubscriptionDate - props.sessionTime)/milisecondsPerHour) : 0
 
 useEffect(()=>{
 
 
-const timeSession = props.loginTime? props.loginTime.toDate().getTime() :0
+const timeSession = props.sessionTime? props.sessionTime:0
 if(timeSession>=endSubscriptionDate){
-    const update = updateDoc(doc(db, "users", props.userDocumentName), {
-        [`subscriptions.${props.subName}`]: null
+    updateDoc(doc(db, "users", `${props.userDocumentName}/subscriptionsCollection/subscriptions`), {
+        [`${props.subName}`]: null
 })
 }
 
-},[props.loginTime])
+},[props.sessionTime])
     
 
     return (
