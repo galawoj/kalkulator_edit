@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styles from "./Login.module.css"
 
+import imageContent from '../../pngwing.png'
 
 
 const Registration = (props) => {
@@ -67,8 +68,12 @@ const Registration = (props) => {
 
     return (
         <>
+        {!props.sendEmailInfo ?
+        (
             <form onSubmit={submitHandler} className={styles.login}>
-            {props.registrationSucces&& <h4 className={styles.errorMessage}>Registration failed!</h4>}
+
+
+          {props.registrationSucces&& <h4 className={styles.errorMessage}>Registration failed!</h4>}
                 <div
                     className={`${styles.control} ${emailIsValid === false ? styles.invalid : ''
                         }`}
@@ -115,11 +120,25 @@ const Registration = (props) => {
                     <button type="submit" disabled={!formIsValid}>
                         Register
                     </button>
+
                     <button className={styles.typeFormButton}  onClick={props.onSwitchHandler}>
                         Sign in
                     </button>
                 </div>
             </form>
+    ):
+    <div className={styles.alert}>
+        <img className={styles.image} src={imageContent} alt="" />
+       <div className={styles.infoEmail}>
+        
+       Verification email has been sent to <b>{enteredEmail}</b>. <br/>
+       Please check your mailbox to verify the account before you sign in.
+       
+        </div> 
+        <button className={styles.typeFormButton}  onClick={props.onSwitchHandler}>
+                        Sign in
+                    </button>
+        </div>}
         </>
     );
 }

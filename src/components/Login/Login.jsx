@@ -10,6 +10,7 @@ const Login = (props) => {
         switchForm ? setSwitchForm(false) : setSwitchForm(true)
         props.onSetLoginSucces(false)
         props.onSetRegistrationSucces(false)
+        props.onSetSendEmailInfo(false)
 
     }
 

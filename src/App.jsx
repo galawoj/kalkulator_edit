@@ -16,7 +16,6 @@ import {
   updateDoc,
   serverTimestamp,
   collection,
-  addDoc
 } from "firebase/firestore";
 import { auth, db } from './firebase';
 import styles from './App.module.css';
@@ -37,6 +36,7 @@ function App() {
   const [subscriptions, setSubscriptions] = useState(false)
   const [loginTime, setLoginTime] = useState(false)
   const [sessionTime,setSessionTime] = useState(false)
+  const [sendEmailInfo,setSendEmailInfo] = useState(false)
 
   const userDocumentName = isLoggedIn.email
 
@@ -82,7 +82,7 @@ function App() {
 
         sendEmailVerification(auth.currentUser)
           .then(() => {
-            alert('email verification link sent!')
+            setSendEmailInfo(true)
           })
 
         newUser(userCredential.user)
@@ -123,7 +123,7 @@ function App() {
     return () => storedUserLoggedInformation()
   }, [])
 
-
+ // serverTimestamp in Firebase
   useEffect(() => {
 
     const docPath = `users/${userDocumentName}`
@@ -142,38 +142,24 @@ function App() {
     })
 
   }, [userDocumentName, isLoggedIn])
-
-
-
-  useEffect(() => {
-
-    const docPath = `users/${userDocumentName}/subscriptionsCollection/subscriptions`
-
-    const docRef = doc(db, docPath);
-
-    getDoc(docRef).then(docSnap => {
-
-      if (docSnap.exists()) {
-
-        const userSubscriptions = docSnap.data()
-        console.log(userSubscriptions)
-        setSubscriptions(userSubscriptions)
-
-      }
-    })
-
-
-  }, [userDocumentName, isLoggedIn])
-
-
+ 
+  // setSubscriptions
 
   useEffect(() => {
+
+
+
     if (isLoggedIn) {
       onSnapshot(doc(db, "users", `${userDocumentName}/subscriptionsCollection/subscriptions`), (doc) => {
         setSubscriptions(doc.data())
       });
     }
+
+
+    
   }, [userDocumentName, isLoggedIn])
+
+ //setLoginTime+setSessionTime
 
   useEffect(() => {
     if (isLoggedIn) {
@@ -183,7 +169,7 @@ function App() {
 if (startSessionTimestamp){
   setLoginTime(startSessionTimestamp)
   setSessionTime(startSessionTimestamp.toDate().getTime())
-  console.log(startSessionTimestamp)
+ 
 }
        
       });
@@ -198,7 +184,6 @@ if (startSessionTimestamp){
       const timeUpdate = 10 //s
       let t = 0
 
-
       const timer = setInterval(() => {
         t += 1
 
@@ -209,7 +194,7 @@ if (startSessionTimestamp){
             'timeSession': new Date(timeSession)
           })
           setSessionTime(timeSession)
-          console.log(timeSession)
+          
         }
         console.log(timeSession)
       }, 1000)
@@ -235,6 +220,8 @@ if (startSessionTimestamp){
       <div className={`${styles.container} ${hide && styles.fullscreen}`}>
         {!isLoggedIn ? (
           <Login
+            onSetSendEmailInfo={setSendEmailInfo}
+            sendEmailInfo={sendEmailInfo}
             onSetLoginSucces={setLoginSucces}
             onSetRegistrationSucces={setRegistrationSucces}
             loginSucces={loginSucces}

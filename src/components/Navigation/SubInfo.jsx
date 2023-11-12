@@ -17,7 +17,7 @@ const SubInfo = (props) => {
 
     const milisecondsPerHour = 3600 * 1000 //ms
 
-    const daysOfSubscription = 5000 //ms
+    const daysOfSubscription = 30*milisecondsPerDay //ms
 
     const endSubscriptionDate = startSubscriptionDate + daysOfSubscription
 

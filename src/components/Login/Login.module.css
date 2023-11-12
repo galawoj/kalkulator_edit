@@ -6,6 +6,15 @@
     margin: 0;
     padding: 0;
   }
+
+  .alert {
+    width: 90%;
+    max-width: 40rem;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+  }
   
   .control {
     margin: 1rem 0;
@@ -13,6 +22,16 @@
     align-items: stretch;
     flex-direction: column;
   }
+
+  .infoEmail {
+   text-align: center;
+  }
+.image{
+  margin: 10px auto;
+  width:12%;
+  height:12%
+}
+
   
   .control label,
   .control input {

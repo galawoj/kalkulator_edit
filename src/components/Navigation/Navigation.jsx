@@ -1,8 +1,8 @@
 
 
-import { auth } from '../../firebase';
+import { auth,db } from '../../firebase';
 import { signOut } from "firebase/auth";
-
+import {updateDoc,doc} from "firebase/firestore"
 import styles from './Navigation.module.css'
 import SubInfo from './SubInfo';
 
@@ -29,7 +29,10 @@ const Navigation = (props) => {
         signOut(auth).then(() => {
             props.setIsLoggedIn(false)
         }).catch(error => console.log(error))
-
+        
+        updateDoc(doc(db, "users", props.userDocumentName), {
+            'startSession': null
+          })
     }
 
 
