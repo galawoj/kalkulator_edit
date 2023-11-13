@@ -35,8 +35,8 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [subscriptions, setSubscriptions] = useState(false)
   const [loginTime, setLoginTime] = useState(false)
-  const [sessionTime,setSessionTime] = useState(false)
-  const [sendEmailInfo,setSendEmailInfo] = useState(false)
+  const [sessionTime, setSessionTime] = useState(false)
+  const [sendEmailInfo, setSendEmailInfo] = useState(false)
 
   const userDocumentName = isLoggedIn.email
 
@@ -47,15 +47,15 @@ function App() {
     const payload = {
       'id': user.uid,
       'email': user.email,
-     
+
     }
     await setDoc(docRef, payload)
 
     const subscriptionsCollection = collection(docRef, "subscriptionsCollection");
-    const timerCollection = collection(docRef,"timerCollection")
+    const timerCollection = collection(docRef, "timerCollection")
 
-    await setDoc(doc(subscriptionsCollection,"subscriptions"), { 'steel': null, 'beam': null, 'pad': null });
-    await setDoc(doc(timerCollection,"timer"),{});
+    await setDoc(doc(subscriptionsCollection, "subscriptions"), { 'steel': null, 'beam': null, 'pad': null });
+    await setDoc(doc(timerCollection, "timer"), {});
   }
 
 
@@ -99,8 +99,6 @@ function App() {
   //Authentication handlers -END
 
 
-
-
   useEffect(() => {
 
     const storedUserLoggedInformation = onAuthStateChanged(auth, (user) => {
@@ -123,7 +121,7 @@ function App() {
     return () => storedUserLoggedInformation()
   }, [])
 
- // serverTimestamp in Firebase
+  // serverTimestamp in Firebase
   useEffect(() => {
 
     const docPath = `users/${userDocumentName}`
@@ -137,41 +135,39 @@ function App() {
         updateDoc(doc(db, "users", userDocumentName), {
           'startSession': serverTimestamp()
         })
-
       }
     })
 
   }, [userDocumentName, isLoggedIn])
- 
+
+
+
   // setSubscriptions
 
-  useEffect(() => {
+    useEffect(() => {
+  
+      if (isLoggedIn) {
+        onSnapshot(doc(db, "users", `${userDocumentName}/subscriptionsCollection/subscriptions`), (doc) => {
+          const userSubscriptions = doc.data()?doc.data():false
+          setSubscriptions(userSubscriptions)
+          
+        });
+      }
+    }, [userDocumentName, isLoggedIn])
+  
 
-
-
-    if (isLoggedIn) {
-      onSnapshot(doc(db, "users", `${userDocumentName}/subscriptionsCollection/subscriptions`), (doc) => {
-        setSubscriptions(doc.data())
-      });
-    }
-
-
-    
-  }, [userDocumentName, isLoggedIn])
-
- //setLoginTime+setSessionTime
+  //setLoginTime+setSessionTime
 
   useEffect(() => {
     if (isLoggedIn) {
       onSnapshot(doc(db, "users", userDocumentName), (doc) => {
 
-      const startSessionTimestamp = doc.data().startSession
-if (startSessionTimestamp){
-  setLoginTime(startSessionTimestamp)
-  setSessionTime(startSessionTimestamp.toDate().getTime())
- 
-}
-       
+        const startSessionTimestamp = doc.data().startSession ? doc.data().startSession : 0
+        if (startSessionTimestamp) {
+          setLoginTime(startSessionTimestamp)
+          setSessionTime(startSessionTimestamp.toDate().getTime())
+        }
+
       });
     }
   }, [userDocumentName, isLoggedIn])
@@ -194,7 +190,7 @@ if (startSessionTimestamp){
             'timeSession': new Date(timeSession)
           })
           setSessionTime(timeSession)
-          
+
         }
         console.log(timeSession)
       }, 1000)
@@ -244,7 +240,7 @@ if (startSessionTimestamp){
 
       {isLoggedIn && <Navigation
         sessionTime={sessionTime}
-        
+
         userDocumentName={userDocumentName}
         userSubscriptions={subscriptions}
         buttonClicked={buttonClicked}
