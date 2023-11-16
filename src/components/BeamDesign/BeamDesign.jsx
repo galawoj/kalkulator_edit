@@ -1,10 +1,12 @@
-import LeftContainer from "./BeamDesignElements/LeftContainer"
-import RightContainer from "./BeamDesignElements/RightContainer"
 import React, { useState } from 'react';
 
+import LeftContainer from "./BeamDesignElements/LeftContainer"
+import RightContainer from "./BeamDesignElements/RightContainer"
+import { CartContext } from '../../store/beam-cart-context';
 
 
-const BeamDesign = (props) => {
+
+const BeamDesign = () => {
 
 
     const [dataElement, setDataElement] = useState({
@@ -24,13 +26,16 @@ const BeamDesign = (props) => {
         quasi: "25"
     })
 
+    const ctxValue={
+dataElement:dataElement,
+onSetDataElement:setDataElement
+    }
 
     return (
-        <>
-            <LeftContainer setDataElement={setDataElement} dataElement={dataElement} />
-            <RightContainer dataElement={dataElement} />
-            
-        </>
+        <CartContext.Provider value={ctxValue}>
+            <LeftContainer/>
+            <RightContainer/>
+        </CartContext.Provider>
 
     )
 }

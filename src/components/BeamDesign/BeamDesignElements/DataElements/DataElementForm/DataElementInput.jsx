@@ -1,15 +1,20 @@
+import { useContext } from 'react'
+import { CartContext } from '../../../../../store/beam-cart-context'
+
 import styles from '../DataElements.module.css'
 
 
 
 const DataElementInput = (props) => {
 
+    const {dataElement,onSetDataElement} = useContext(CartContext)
+
     const dataInputChanger = (e) => {
-        props.onSetDataElement((actualData) => {
+        onSetDataElement((actualData) => {
             actualData[e.target.id] = e.target.value
             return { ...actualData }
         })
-        console.log(props.dataElement)
+        console.log(dataElement)
     }
 
 
@@ -21,7 +26,7 @@ const DataElementInput = (props) => {
                 {props.description}
                 <input
                     id={props.id}
-                    value={props.dataElement[props.id]}
+                    value={dataElement[props.id]}
                     onChange={dataInputChanger}
                     type="number"
                 />

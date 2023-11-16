@@ -3,7 +3,7 @@ import DataElementInput from './DataElementForm/DataElementInput'
 import SelectConcrete from './DataElementForm/SelectConcrete'
 import SelectSteel from './DataElementForm/SelectSteel'
 
-const Material = (props) => {
+const Material = () => {
 
 
     return (
@@ -12,9 +12,8 @@ const Material = (props) => {
             <form className={styles.section}>
             <div className={styles.header}><h5>Concrete Parameters</h5></div>
 
-                <SelectConcrete {...props} />
-
-
+                <SelectConcrete/>
+                
                 <div className={styles.intersection}>
                     <div>{'fck [MPa]='} </div>
                     <div>{'Ecm [GPa]='}</div>
@@ -26,8 +25,8 @@ const Material = (props) => {
 
                 <div className={styles.section}>
                 <div className={styles.header}><h5> Long-term parameters</h5></div>
-                    <DataElementInput {...props} name={'Relative Humidty'} id={'RH'} description={'RH [%] = '} />
-                    <DataElementInput {...props} name={'Age of concrete at loading t0'} id={'age_t0'} description={'days [%] = '} />
+                    <DataElementInput name={'Relative Humidty'} id={'RH'} description={'RH [%] = '} />
+                    <DataElementInput name={'Age of concrete at loading t0'} id={'age_t0'} description={'days [%] = '} />
                 </div>
 
 
@@ -35,11 +34,11 @@ const Material = (props) => {
 
             <form className={styles.section}>
             <div className={styles.header}><h5> Steel Parameters</h5></div>
-                <SelectSteel {...props} />
+                <SelectSteel/>
 
                 <div className={styles.intersection}></div>
-                <DataElementInput {...props} name={'Steel diameters'} id={'steel_diameters'} description={'fid [mm] = '} />
-                <DataElementInput {...props} name={' Stirrup diameters'} id={'stirrup_diameters'} description={'fis [mm] = '} />
+                <DataElementInput name={'Steel diameters'} id={'steel_diameters'} description={'fid [mm] = '} />
+                <DataElementInput name={' Stirrup diameters'} id={'stirrup_diameters'} description={'fis [mm] = '} />
 
             </form>
 

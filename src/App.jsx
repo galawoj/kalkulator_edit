@@ -17,12 +17,14 @@ import {
   serverTimestamp,
   collection,
 } from "firebase/firestore";
+
 import { auth, db } from './firebase';
 import styles from './App.module.css';
 import IntroButtons from "./components/Intro/IntroButtons";
 import BeamDesign from "./components/BeamDesign/BeamDesign";
 import Login from "./components/Login/Login";
 import Navigation from './components/Navigation/Navigation';
+
 
 function App() {
 
@@ -208,7 +210,7 @@ function App() {
   }
 
 
-
+  
 
 
   return (

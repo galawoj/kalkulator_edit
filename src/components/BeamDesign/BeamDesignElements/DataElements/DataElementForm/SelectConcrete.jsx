@@ -1,21 +1,25 @@
+import { useContext } from 'react'
+import { CartContext } from '../../../../../store/beam-cart-context'
+
 import styles from '../DataElements.module.css'
 
+const SelectConcrete = () => {
 
-const SelectConcrete = (props) => {
+    const {dataElement,onSetDataElement} = useContext(CartContext)
 
     const dataInputChanger = (e) => {
-        props.onSetDataElement((actualData) => {
+        onSetDataElement((actualData) => {
             actualData[e.target.id] = e.target.value
             return { ...actualData }
         })
-        console.log(props.dataElement)
+        console.log(dataElement)
     }
 
 
     return (
         <label className={styles.intersection}>
             Concrete Class
-            <select onChange={dataInputChanger} value={props.dataElement['concreteClass']} id={'concreteClass'} className={styles.concrete_class}>
+            <select onChange={dataInputChanger} value={dataElement['concreteClass']} id={'concreteClass'} className={styles.concrete_class}>
                 <option value="C12/15">C12/15</option>
                 <option value="C16/20">C16/20</option>
                 <option value="20/25">20/25</option>

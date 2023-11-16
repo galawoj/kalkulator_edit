@@ -1,18 +1,20 @@
-import styles from './BeamDesignElements.module.css';
 import React, { useState } from 'react';
+
+import styles from './BeamDesignElements.module.css';
+
 import Geometry from './DataElements/Geometry';
 import Material from './DataElements/Material';
 import Load from './DataElements/Load';
 
 
-const LeftContainer = (props) => {
+const LeftContainer = () => {
+
 
     const [dataType, setDataType] = useState('geometry')
 
 
     const labelHandler = (e) => {
         setDataType(e.target.id)
-
     }
 
     return (
@@ -26,9 +28,9 @@ const LeftContainer = (props) => {
 
 
             <div className={styles.board}>
-                {dataType === 'geometry' ? <Geometry onSetDataElement={props.setDataElement} dataElement={props.dataElement} /> : null}
-                {dataType === 'material' ? <Material onSetDataElement={props.setDataElement} dataElement={props.dataElement} /> : null}
-                {dataType === 'load' ? <Load onSetDataElement={props.setDataElement} dataElement={props.dataElement} /> : null}
+                {dataType === 'geometry' ? <Geometry/> : null}
+                {dataType === 'material' ? <Material/> : null}
+                {dataType === 'load' ? <Load/> : null}
             </div>
 
 
