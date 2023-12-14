@@ -3,7 +3,7 @@ import React, {useEffect} from 'react'
 import { doc, updateDoc } from "firebase/firestore"; 
 import { db } from '../../firebase';
 
-import SubButton from "./SubButton"
+import UnsubButton from "./UnsubButton"
 import styles from "./Navigation.module.css"
 
 
@@ -17,7 +17,7 @@ const SubInfo = (props) => {
 
     const milisecondsPerHour = 3600 * 1000 //ms
 
-    const daysOfSubscription = 30*milisecondsPerDay //ms
+    const daysOfSubscription = props.userSubscriptionsTime[props.subName]*milisecondsPerDay //ms
 
     const endSubscriptionDate = startSubscriptionDate + daysOfSubscription
 
@@ -28,7 +28,7 @@ const SubInfo = (props) => {
 useEffect(()=>{
 
 
-const timeSession = props.sessionTime? props.sessionTime:0
+const timeSession = props.sessionTime ? props.sessionTime:0
 if(timeSession>=endSubscriptionDate){
     updateDoc(doc(db, "users", `${props.userDocumentName}/subscriptionsCollection/subscriptions`), {
         [`${props.subName}`]: null
@@ -43,7 +43,7 @@ if(timeSession>=endSubscriptionDate){
             <h4>{props.children}</h4>
             <div>Left: <b style={{'color':"red"}}>{subscriptionLeftDays<=1 ? subscriptionLeftHours : subscriptionLeftDays} {subscriptionLeftDays<=1?'hours':'days'}</b></div>
             
-            <SubButton {...props}>Delete</SubButton>
+            <UnsubButton {...props}>Delete</UnsubButton>
 
         </div>
     )

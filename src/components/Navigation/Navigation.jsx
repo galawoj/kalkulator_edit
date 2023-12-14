@@ -14,9 +14,6 @@ const Navigation = (props) => {
       props.userSubscriptions.beam ||
       props.userSubscriptions.pad;
 
-
-
-
     const userEmail = props.user.email
 
     const closerHandler = () => {

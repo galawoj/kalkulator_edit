@@ -2,7 +2,7 @@ import { doc, updateDoc } from "firebase/firestore";
 import { db } from '../../firebase';
 import styles from "./Navigation.module.css"
 
-const SubButton = (props) =>{
+const UnsubButton = (props) =>{
 
     
    const updateSubHandler = async () =>{
@@ -25,4 +25,4 @@ const SubButton = (props) =>{
     )
 }
 
-export default SubButton
+export default UnsubButton

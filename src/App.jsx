@@ -36,6 +36,7 @@ function App() {
   const [registrationSucces, setRegistrationSucces] = useState(false)
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [subscriptions, setSubscriptions] = useState(false)
+  const [subscriptionsTime, setSubscriptionsTime] = useState(false)
   const [loginTime, setLoginTime] = useState(false)
   const [sessionTime, setSessionTime] = useState(false)
   const [sendEmailInfo, setSendEmailInfo] = useState(false)
@@ -49,14 +50,16 @@ function App() {
     const payload = {
       'id': user.uid,
       'email': user.email,
-
+      'startSession':null
     }
+
     await setDoc(docRef, payload)
 
     const subscriptionsCollection = collection(docRef, "subscriptionsCollection");
     const timerCollection = collection(docRef, "timerCollection")
 
     await setDoc(doc(subscriptionsCollection, "subscriptions"), { 'steel': null, 'beam': null, 'pad': null });
+    await setDoc(doc(subscriptionsCollection, "subscriptionsTime"), { 'steel': 30, 'beam': 30, 'pad': 30 });
     await setDoc(doc(timerCollection, "timer"), {});
   }
 
@@ -70,8 +73,8 @@ function App() {
       .then(() => {
         setLoginSucces(false)
         setRegistrationSucces(false)
-
       })
+
       .catch((error) => {
         setLoginSucces(error)
       });
@@ -85,9 +88,10 @@ function App() {
         sendEmailVerification(auth.currentUser)
           .then(() => {
             setSendEmailInfo(true)
+            newUser(userCredential.user)
           })
 
-        newUser(userCredential.user)
+        
         setRegistrationSucces(false)
         setLoginSucces(false)
         signOut(auth)
@@ -96,6 +100,8 @@ function App() {
       .catch((error) => {
         setRegistrationSucces(error)
       });
+
+      
   }
 
   //Authentication handlers -END
@@ -112,6 +118,7 @@ function App() {
           console.log(user)
         } else {
           setIsLoggedIn(false)
+          signOut(auth)
         }
 
       } else {
@@ -121,7 +128,7 @@ function App() {
     })
 
     return () => storedUserLoggedInformation()
-  }, [])
+  },[])
 
   // serverTimestamp in Firebase
   useEffect(() => {
@@ -151,8 +158,12 @@ function App() {
       if (isLoggedIn) {
         onSnapshot(doc(db, "users", `${userDocumentName}/subscriptionsCollection/subscriptions`), (doc) => {
           const userSubscriptions = doc.data()?doc.data():false
-          setSubscriptions(userSubscriptions)
-          
+          setSubscriptions(userSubscriptions)   
+        });
+
+        onSnapshot(doc(db, "users", `${userDocumentName}/subscriptionsCollection/subscriptionsTime`), (doc) => {
+          const userSubscriptionsTime = doc.data()?doc.data():false
+          setSubscriptionsTime(userSubscriptionsTime)   
         });
       }
     }, [userDocumentName, isLoggedIn])
@@ -242,9 +253,9 @@ function App() {
 
       {isLoggedIn && <Navigation
         sessionTime={sessionTime}
-
         userDocumentName={userDocumentName}
         userSubscriptions={subscriptions}
+        userSubscriptionsTime={subscriptionsTime}
         buttonClicked={buttonClicked}
         user={isLoggedIn}
         setIsLoggedIn={setIsLoggedIn}
