@@ -50,7 +50,8 @@ function App() {
     const payload = {
       'id': user.uid,
       'email': user.email,
-      'startSession':null
+      'startSession': null,
+      'accessToken': null
     }
 
     await setDoc(docRef, payload)
@@ -91,7 +92,7 @@ function App() {
             newUser(userCredential.user)
           })
 
-        
+
         setRegistrationSucces(false)
         setLoginSucces(false)
         signOut(auth)
@@ -101,13 +102,17 @@ function App() {
         setRegistrationSucces(error)
       });
 
-      
+
   }
 
   //Authentication handlers -END
 
 
   useEffect(() => {
+
+    const docPath = `users/${userDocumentName}`
+
+    const docRef = doc(db, docPath);
 
     const storedUserLoggedInformation = onAuthStateChanged(auth, (user) => {
 
@@ -128,46 +133,74 @@ function App() {
     })
 
     return () => storedUserLoggedInformation()
-  },[])
+  }, [])
 
-  // serverTimestamp in Firebase
+  // serverTimestamp & accessToken in Firebase
   useEffect(() => {
+    const docPath_timer = `users/${userDocumentName}/timerCollection/timer`
 
-    const docPath = `users/${userDocumentName}`
+    const docRef_timer = doc(db, docPath_timer);
 
-    const docRef = doc(db, docPath);
 
-    getDoc(docRef).then(docSnap => {
+    let lastSessionTime
+    getDoc(docRef_timer)
+      .then(docSnap => {
+        if (docSnap.exists()) {
+          lastSessionTime = docSnap.data().timeSession
 
-      if (docSnap.exists()) {
+        }
+        const timeToLastSession = lastSessionTime && ((new Date).getTime() - lastSessionTime.toDate().getTime()) / 60000 // minutes
+    
 
-        updateDoc(doc(db, "users", userDocumentName), {
-          'startSession': serverTimestamp()
-        })
-      }
-    })
 
+
+        const docPath_main = `users/${userDocumentName}`
+
+        const docRef_main = doc(db, docPath_main);
+
+        getDoc(docRef_main)
+          .then(docSnap => {
+
+            if (docSnap.exists() && docSnap.data().accessToken === isLoggedIn.accessToken) {
+
+              updateDoc(doc(db, "users", userDocumentName), {
+                'startSession': serverTimestamp()
+              })
+            } else if (docSnap.exists() && !docSnap.data().startSession || timeToLastSession > 30 ) {
+
+              updateDoc(doc(db, "users", userDocumentName), {
+                'accessToken': isLoggedIn.accessToken,
+                'startSession': serverTimestamp()
+              })
+
+            } else if (isLoggedIn.accessToken == undefined) {
+            } else {
+              setIsLoggedIn(false)
+              signOut(auth)
+            }
+          })
+      })
   }, [userDocumentName, isLoggedIn])
 
 
 
   // setSubscriptions
 
-    useEffect(() => {
-  
-      if (isLoggedIn) {
-        onSnapshot(doc(db, "users", `${userDocumentName}/subscriptionsCollection/subscriptions`), (doc) => {
-          const userSubscriptions = doc.data()?doc.data():false
-          setSubscriptions(userSubscriptions)   
-        });
+  useEffect(() => {
 
-        onSnapshot(doc(db, "users", `${userDocumentName}/subscriptionsCollection/subscriptionsTime`), (doc) => {
-          const userSubscriptionsTime = doc.data()?doc.data():false
-          setSubscriptionsTime(userSubscriptionsTime)   
-        });
-      }
-    }, [userDocumentName, isLoggedIn])
-  
+    if (isLoggedIn) {
+      onSnapshot(doc(db, "users", `${userDocumentName}/subscriptionsCollection/subscriptions`), (doc) => {
+        const userSubscriptions = doc.data() ? doc.data() : false
+        setSubscriptions(userSubscriptions)
+      });
+
+      onSnapshot(doc(db, "users", `${userDocumentName}/subscriptionsCollection/subscriptionsTime`), (doc) => {
+        const userSubscriptionsTime = doc.data() ? doc.data() : false
+        setSubscriptionsTime(userSubscriptionsTime)
+      });
+    }
+  }, [userDocumentName, isLoggedIn])
+
 
   //setLoginTime+setSessionTime
 
@@ -221,7 +254,7 @@ function App() {
   }
 
 
-  
+
 
 
   return (
