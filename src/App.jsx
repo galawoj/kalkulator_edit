@@ -152,8 +152,6 @@ function App() {
         const timeToLastSession = lastSessionTime && ((new Date).getTime() - lastSessionTime.toDate().getTime()) / 60000 // minutes
     
 
-
-
         const docPath_main = `users/${userDocumentName}`
 
         const docRef_main = doc(db, docPath_main);

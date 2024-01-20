@@ -5,23 +5,15 @@ import styles from '../DataElements.module.css'
 
 const SelectSteel = () => {
 
-    const {dataElement,onSetDataElement} = useContext(CartContext)
-
-    const dataInputChanger = (e) => {
-        onSetDataElement((actualData) => {
-            actualData[e.target.id] = e.target.value
-            return { ...actualData }
-        })
-        console.log(dataElement)
-    }
+    const {dataElement,dataInputChanger} = useContext(CartContext)
 
 
     return (
         <label className={styles.intersection}>
         Steel Grade
         <select onChange={dataInputChanger} value={dataElement['steelGrade']}  id={'steelGrade'}>
-            <option value="AIIIN">AIIIN</option>
-            <option value="B500W">B500W</option>
+            <option value="B400">B400</option>
+            <option value="B500">B500</option>
         </select>
     </label>
     )

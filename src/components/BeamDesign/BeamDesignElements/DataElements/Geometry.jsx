@@ -14,19 +14,11 @@ const Geometry = () => {
                 <DataElementInput name={'Height'} id={'height'} description={'h [cm] = '} />
             </form>
 
-
-
             <form className={styles.section}>
             <div className={styles.header}><h5> Cover</h5></div>
                 <DataElementInput name={'cnom [mm]'} id={'cnom'} description={''} />
-                <DataElementInput name={'cnom.bottom [mm]'} id={'cnomBottom'} description={''} />
             </form>
 
-            <form className={styles.section}>
-            <div className={styles.header}><h5> Element Data</h5></div>
-                <DataElementInput name={'Effective Length'} id={'effLength'} description={'leff [m] = '} />
-                <DataElementInput name={'Coefficient'} id={'coefficient'} description={'ak [5/48] = '} />
-            </form>
 
         </>
     )

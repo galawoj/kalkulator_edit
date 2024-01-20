@@ -13,22 +13,25 @@ const BeamDesign = () => {
         width: "25",
         height: "50",
         cnom: "25",
-        cnomBottom: "25",
-        effLength: "3",
-        coefficient: "25",
-        concreteClass: "30/37",
-        RH: '40',
-        age_t0: "28",
+        concreteClass: "C30/37",
         steelGrade: "AIIIN",
         steel_diameters: "16",
         stirrup_diameters: "8",
-        design: "100",
-        quasi: "25"
+        design: "100"
     })
+
+
+    
 
     const ctxValue={
 dataElement:dataElement,
-onSetDataElement:setDataElement
+dataInputChanger: (e) => {
+    setDataElement((actualData) => {
+        actualData[e.target.id] = e.target.value
+        return { ...actualData }
+    })
+    console.log(dataElement)
+}
     }
 
     return (
