@@ -12,8 +12,6 @@ const Results = () => {
     const { dataElement } = useContext(CartContext)
     const [element, setElement] = useState("")
 
-  
-
 
     function postApi() {
         fetch("https://wgservice-apim.azure-api.net/api", {

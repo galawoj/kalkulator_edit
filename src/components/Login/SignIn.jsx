@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import styles from "./Login.module.css"
+import { CartContext } from '../../store/app-cart-context';
 
 
 
@@ -11,6 +12,8 @@ const SignIn = (props) => {
     const [enteredPassword, setEnteredPassword] = useState('');
     const [passwordIsValid, setPasswordIsValid] = useState();
     const [formIsValid, setFormIsValid] = useState(false);
+
+const {onLoginHandler,loginSucces} = useContext(CartContext)
 
     useEffect(() => {
 
@@ -48,14 +51,14 @@ const SignIn = (props) => {
 
     const submitHandler = (event) => {
         event.preventDefault();
-        props.onLogin(enteredEmail, enteredPassword);
+        onLoginHandler(enteredEmail, enteredPassword);
     };
 
     return (
         <>
         
             <form onSubmit={submitHandler} className={styles.login}>
-            {props.loginSucces&& <h4 className={styles.errorMessage}>Login failed!</h4>}
+            {loginSucces&& <h4 className={styles.errorMessage}>Login failed!</h4>}
                 <div
                     className={`${styles.control} ${emailIsValid === false ? styles.invalid : ''
                         }`}

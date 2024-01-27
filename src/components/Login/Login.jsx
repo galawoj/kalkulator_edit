@@ -1,22 +1,23 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import Registration from './Registration';
 import SignIn from './SignIn';
+import { CartContext } from '../../store/app-cart-context';
 
-
-const Login = (props) => {
+const Login = () => {
     const [switchForm, setSwitchForm] = useState(false)
+    const { onSetLoginSucces, onSetRegistrationSucces, onSetSendEmailInfo } = useContext(CartContext)
 
     const switchHandler = () => {
         switchForm ? setSwitchForm(false) : setSwitchForm(true)
-        props.onSetLoginSucces(false)
-        props.onSetRegistrationSucces(false)
-        props.onSetSendEmailInfo(false)
+        onSetLoginSucces(false)
+        onSetRegistrationSucces(false)
+        onSetSendEmailInfo(false)
 
     }
 
     return (
         <>
-            {!switchForm ? <SignIn onSwitchHandler={switchHandler} {...props} /> : <Registration onSwitchHandler={switchHandler} {...props} />}
+            {!switchForm ? <SignIn onSwitchHandler={switchHandler} /> : <Registration onSwitchHandler={switchHandler} />}
 
         </>
 

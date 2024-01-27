@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import styles from "./Login.module.css"
 
 import imageContent from '../../pngwing.png'
+import { CartContext } from '../../store/app-cart-context';
 
 
 const Registration = (props) => {
-
+const {onRegisterHandler,sendEmailInfo,registrationSucces} = useContext(CartContext)
 
     const [enteredEmail, setEnteredEmail] = useState('');
     const [emailIsValid, setEmailIsValid] = useState();
@@ -63,17 +64,17 @@ const Registration = (props) => {
 
     const submitHandler = (event) => {
         event.preventDefault();
-        props.onRegister(enteredEmail, enteredPassword);
+        onRegisterHandler(enteredEmail, enteredPassword);
     };
 
     return (
         <>
-        {!props.sendEmailInfo ?
+        {!sendEmailInfo ?
         (
             <form onSubmit={submitHandler} className={styles.login}>
 
 
-          {props.registrationSucces&& <h4 className={styles.errorMessage}>Registration failed!</h4>}
+          {registrationSucces&& <h4 className={styles.errorMessage}>Registration failed!</h4>}
                 <div
                     className={`${styles.control} ${emailIsValid === false ? styles.invalid : ''
                         }`}

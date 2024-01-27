@@ -5,29 +5,42 @@ import { signOut } from "firebase/auth";
 import {updateDoc,doc} from "firebase/firestore"
 import styles from './Navigation.module.css'
 import SubInfo from './SubInfo';
+import { useContext } from 'react';
+import { CartContext } from '../../store/app-cart-context';
 
 
-const Navigation = (props) => {
+const Navigation = () => {
+
+const {
+    setHide,
+    setBeamClicked,
+    setButtonClicked,
+    setIsLoggedIn,
+    subscriptions,
+    isLoggedin,
+    userDocumentName,
+    buttonClicked
+} =useContext(CartContext)
 
     const isTrue = 
-      props.userSubscriptions.steel ||
-      props.userSubscriptions.beam ||
-      props.userSubscriptions.pad;
+      subscriptions.steel ||
+      subscriptions.beam ||
+      subscriptions.pad;
 
-    const userEmail = props.user.email
+    const userEmail = isLoggedin.email
 
     const closerHandler = () => {
-        props.setHide(false)
-        props.setBeamClicked(false)
-        setTimeout(() => { props.setButtonClicked(false) }, 800)  //fade-in buttonów
+        setHide(false)
+        setBeamClicked(false)
+        setTimeout(() => { setButtonClicked(false) }, 800)  //fade-in buttonów
     }
 
     const logOutHandler = () => {
         signOut(auth).then(() => {
-            props.setIsLoggedIn(false)
+            setIsLoggedIn(false)
         }).catch(error => console.log(error))
         
-        updateDoc(doc(db, "users", props.userDocumentName), {
+        updateDoc(doc(db, "users", userDocumentName), {
             'startSession': null
           })
     }
@@ -36,7 +49,7 @@ const Navigation = (props) => {
 
     return (
         <nav className={styles.navigation}>
-            {props.buttonClicked
+            {buttonClicked
                 ?
                 <button onClick={closerHandler}>Main menu</button>
                 :
@@ -48,9 +61,9 @@ const Navigation = (props) => {
 
 
             {isTrue ? <div className={styles.informations}><h4>Your subscriptions:</h4></div> : null}
-            {props.userSubscriptions.steel && (<SubInfo {...props} subName={"steel"}>Steel Member Design</SubInfo>)}
-            {props.userSubscriptions.beam && (<SubInfo {...props} subName={"beam"}>Beam Designer</SubInfo>)}
-            {props.userSubscriptions.pad && (<SubInfo {...props} subName={"pad"}>Pad Foundation Design</SubInfo>)}
+            {subscriptions.steel && (<SubInfo subName={"steel"}>Steel Member Design</SubInfo>)}
+            {subscriptions.beam && (<SubInfo subName={"beam"}>Beam Designer</SubInfo>)}
+            {subscriptions.pad && (<SubInfo subName={"pad"}>Pad Foundation Design</SubInfo>)}
 
         </nav>
 

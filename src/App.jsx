@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { CartContext } from './store/app-cart-context'
 
 import {
   signInWithEmailAndPassword,
@@ -150,7 +151,7 @@ function App() {
 
         }
         const timeToLastSession = lastSessionTime && ((new Date).getTime() - lastSessionTime.toDate().getTime()) / 60000 // minutes
-    
+
 
         const docPath_main = `users/${userDocumentName}`
 
@@ -164,7 +165,7 @@ function App() {
               updateDoc(doc(db, "users", userDocumentName), {
                 'startSession': serverTimestamp()
               })
-            } else if (docSnap.exists() && !docSnap.data().startSession || timeToLastSession > 30 ) {
+            } else if (docSnap.exists() && !docSnap.data().startSession || timeToLastSession > 30) {
 
               updateDoc(doc(db, "users", userDocumentName), {
                 'accessToken': isLoggedIn.accessToken,
@@ -252,50 +253,47 @@ function App() {
   }
 
 
+  const ctxValue = {
+    onSetSendEmailInfo: setSendEmailInfo,
+    onSetLoginSucces: setLoginSucces,
+    onSetRegistrationSucces: setRegistrationSucces,		
+    onLoginHandler:loginHandler,		
+    onRegisterHandler:registerHandler,
+    onBeamDesignHandler:beamDesignHandler,
+    setIsLoggedIn: setIsLoggedIn,	
+    setButtonClicked: setButtonClicked,
+    setHide: setHide,	
+    setBeamClicked: setBeamClicked,	
 
+    sendEmailInfo: sendEmailInfo,		
+    loginSucces:loginSucces,
+    registrationSucces:registrationSucces,		
+    userDocumentName:userDocumentName,	
+    subscriptions: subscriptions,		
+    buttonClicked:buttonClicked,	
+    sessionTime:sessionTime,		
+    subscriptionsTime:subscriptionsTime,		
+    isLoggedIn:isLoggedIn,
+  }
 
 
   return (
-    <>
+    <CartContext.Provider value={ctxValue}>
       <div className={`${styles.container} ${hide && styles.fullscreen}`}>
         {!isLoggedIn ? (
-          <Login
-            onSetSendEmailInfo={setSendEmailInfo}
-            sendEmailInfo={sendEmailInfo}
-            onSetLoginSucces={setLoginSucces}
-            onSetRegistrationSucces={setRegistrationSucces}
-            loginSucces={loginSucces}
-            registrationSucces={registrationSucces}
-            onLogin={loginHandler}
-            onRegister={registerHandler}
-          />
+          <Login/>
         ) : (
           !hide && (
-            <IntroButtons
-              userDocumentName={userDocumentName}
-              userSubscriptions={subscriptions}
-              onBeamDesignHandler={beamDesignHandler}
-              buttonClicked={buttonClicked}
-            />
+            <IntroButtons/>
           )
         )}
         {beamClicked && <BeamDesign />}
       </div>
 
-      {isLoggedIn && <Navigation
-        sessionTime={sessionTime}
-        userDocumentName={userDocumentName}
-        userSubscriptions={subscriptions}
-        userSubscriptionsTime={subscriptionsTime}
-        buttonClicked={buttonClicked}
-        user={isLoggedIn}
-        setIsLoggedIn={setIsLoggedIn}
-        setButtonClicked={setButtonClicked}
-        setHide={setHide}
-        setBeamClicked={setBeamClicked}
-      />}
-    </>
-  );
+      {isLoggedIn && <Navigation/>}
+
+    </CartContext.Provider>
+  )
 }
 
 export default App;

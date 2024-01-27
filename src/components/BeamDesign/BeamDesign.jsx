@@ -20,27 +20,29 @@ const BeamDesign = () => {
         design: "100"
     })
 
-
-    
-
-    const ctxValue={
-dataElement:dataElement,
-dataInputChanger: (e) => {
-    setDataElement((actualData) => {
-        actualData[e.target.id] = e.target.value
-        return { ...actualData }
-    })
-    console.log(dataElement)
-}
+    const dataInputChanger = (e) => {
+        setDataElement((actualData) => {
+            actualData[e.target.id] = e.target.value
+            return { ...actualData }
+        })
+        console.log(dataElement)
     }
 
-    return (
-        <CartContext.Provider value={ctxValue}>
-            <LeftContainer/>
-            <RightContainer/>
-        </CartContext.Provider>
 
-    )
+
+    const ctxValue = {
+        dataElement: dataElement,
+        dataInputChanger: dataInputChanger
+    }
+
+
+return (
+    <CartContext.Provider value={ctxValue}>
+        <LeftContainer />
+        <RightContainer />
+    </CartContext.Provider>
+
+)
 }
 
 export default BeamDesign

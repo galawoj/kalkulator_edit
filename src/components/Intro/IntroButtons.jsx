@@ -1,22 +1,24 @@
 
+import { useContext } from 'react'
 import Button from './Button'
+import { CartContext } from '../../store/app-cart-context'
 
 
-const IntroButtons = (props) => {  
+const IntroButtons = () => {  
 
-    
+    const {onBeamDesignHandler,subscriptions} =useContext(CartContext)
 
     return (
         <>
-            <Button isActive={props.userSubscriptions.steel} subName={"steel"}  {...props}>
+            <Button isActive={subscriptions.steel} subName={"steel"}>
                 Steel member design
            </Button>
 
-            <Button isActive={props.userSubscriptions.beam} subName={"beam"} onClick={props.onBeamDesignHandler} {...props}>
+            <Button isActive={subscriptions.beam} subName={"beam"} onClick={onBeamDesignHandler}>
                 Beam design
             </Button>
             
-            <Button  isActive={props.userSubscriptions.pad} subName={"pad"} {...props}>
+            <Button  isActive={subscriptions.pad} subName={"pad"}>
                 Pad foundation design
             </Button>
             
