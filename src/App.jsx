@@ -256,41 +256,37 @@ function App() {
   const ctxValue = {
     onSetSendEmailInfo: setSendEmailInfo,
     onSetLoginSucces: setLoginSucces,
-    onSetRegistrationSucces: setRegistrationSucces,		
-    onLoginHandler:loginHandler,		
-    onRegisterHandler:registerHandler,
-    onBeamDesignHandler:beamDesignHandler,
-    setIsLoggedIn: setIsLoggedIn,	
+    onSetRegistrationSucces: setRegistrationSucces,
+    onLoginHandler: loginHandler,
+    onRegisterHandler: registerHandler,
+    onBeamDesignHandler: beamDesignHandler,
+    setIsLoggedIn: setIsLoggedIn,
     setButtonClicked: setButtonClicked,
-    setHide: setHide,	
-    setBeamClicked: setBeamClicked,	
+    setHide: setHide,
+    setBeamClicked: setBeamClicked,
 
-    sendEmailInfo: sendEmailInfo,		
-    loginSucces:loginSucces,
-    registrationSucces:registrationSucces,		
-    userDocumentName:userDocumentName,	
-    subscriptions: subscriptions,		
-    buttonClicked:buttonClicked,	
-    sessionTime:sessionTime,		
-    subscriptionsTime:subscriptionsTime,		
-    isLoggedIn:isLoggedIn,
+    sendEmailInfo: sendEmailInfo,
+    loginSucces: loginSucces,
+    registrationSucces: registrationSucces,
+    userDocumentName: userDocumentName,
+    subscriptions: subscriptions,
+    buttonClicked: buttonClicked,
+    sessionTime: sessionTime,
+    subscriptionsTime: subscriptionsTime,
+    isLoggedIn: isLoggedIn,
   }
 
 
   return (
     <CartContext.Provider value={ctxValue}>
       <div className={`${styles.container} ${hide && styles.fullscreen}`}>
-        {!isLoggedIn ? (
-          <Login/>
-        ) : (
-          !hide && (
-            <IntroButtons/>
-          )
-        )}
+
+        {!isLoggedIn ? (<Login />) : (!hide && (<IntroButtons />))}
+
         {beamClicked && <BeamDesign />}
       </div>
 
-      {isLoggedIn && <Navigation/>}
+      {isLoggedIn && <Navigation />}
 
     </CartContext.Provider>
   )
