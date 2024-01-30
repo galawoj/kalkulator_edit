@@ -6,8 +6,6 @@
 * [Setup](#setup)
 
 
-* [More detailed information about modules](#more-detailed-information-about-modules)
-
 
 ## General info
 Welcome to the Construction Calculators Platform!<br> This application integrates multiple construction calculators, designed to assist construction designers throughout the project design process.
