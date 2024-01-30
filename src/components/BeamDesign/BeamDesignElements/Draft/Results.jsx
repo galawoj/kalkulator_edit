@@ -50,9 +50,9 @@ const Results = () => {
 
     return (
         <div className={styles.results}>
-            <h4>Results</h4>
+            
             <div>
-                <button onClick={postApi}>POST</button>
+                <button onClick={postApi}>RESULTS</button>
                 {element}
             </div>
 

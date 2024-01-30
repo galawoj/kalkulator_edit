@@ -17,7 +17,7 @@ const {
     setButtonClicked,
     setIsLoggedIn,
     subscriptions,
-    isLoggedin,
+    isLoggedIn,
     userDocumentName,
     buttonClicked
 } =useContext(CartContext)
@@ -27,7 +27,7 @@ const {
       subscriptions.beam ||
       subscriptions.pad;
 
-    const userEmail = isLoggedin.email
+    const userEmail = isLoggedIn.email
 
     const closerHandler = () => {
         setHide(false)
