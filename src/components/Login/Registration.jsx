@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import styles from "./Login.module.css"
 
-import imageContent from '../../pngwing.png'
+import imageContent from '../../images/pngwing.png'
 import { CartContext } from '../../store/app-cart-context';
 
 
