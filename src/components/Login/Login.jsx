@@ -5,7 +5,7 @@ import { CartContext } from '../../store/app-cart-context';
 
 const Login = () => {
     const [switchForm, setSwitchForm] = useState(false)
-    const { onSetLoginSucces, onSetRegistrationSucces, onSetSendEmailInfo } = useContext(CartContext)
+    const { onSetLoginSucces, onSetRegistrationSucces, onSetSendEmailInfo,isLoggedIn } = useContext(CartContext)
 
     const switchHandler = () => {
         switchForm ? setSwitchForm(false) : setSwitchForm(true)
@@ -17,7 +17,7 @@ const Login = () => {
 
     return (
         <>
-            {!switchForm ? <SignIn onSwitchHandler={switchHandler} /> : <Registration onSwitchHandler={switchHandler} />}
+            {!isLoggedIn && (!switchForm ? <SignIn onSwitchHandler={switchHandler} /> : <Registration onSwitchHandler={switchHandler} />)}
 
         </>
 
