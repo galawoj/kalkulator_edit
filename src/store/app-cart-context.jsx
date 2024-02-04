@@ -45,8 +45,8 @@ export const CartContext = createContext({
     introButtonClicked:{},		
     sessionTime:{},		
     subscriptionsTime:{},		
-    isLoggedIn:{}	
-    
+    isLoggedIn:{},	
+    waitingForRegistration: {}
 });
 
 
@@ -65,6 +65,8 @@ export default function ContextProvider ({children}) {
         const [loginTime, setLoginTime] = useState(false)
         const [sessionTime, setSessionTime] = useState(false)
         const [sendEmailInfo, setSendEmailInfo] = useState(false)
+        const [waitingForRegistration,setWaitingForRegistration] = useState(false)
+
       
         const userDocumentName = isLoggedIn.email
       
@@ -107,12 +109,13 @@ export default function ContextProvider ({children}) {
         }
       
         const registerHandler = (enteredEmail, enteredPassword) => {
-      
+          setWaitingForRegistration(true)
           createUserWithEmailAndPassword(auth, enteredEmail, enteredPassword)
             .then((userCredential) => {
       
               sendEmailVerification(auth.currentUser)
                 .then(() => {
+                  setWaitingForRegistration(false)
                   setSendEmailInfo(true)
                   newUser(userCredential.user)
                 })
@@ -300,6 +303,7 @@ export default function ContextProvider ({children}) {
           sessionTime: sessionTime,
           subscriptionsTime: subscriptionsTime,
           isLoggedIn: isLoggedIn,
+          waitingForRegistration:waitingForRegistration
         }
       
 
