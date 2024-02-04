@@ -4,11 +4,11 @@ import { CartContext } from "../../store/app-cart-context"
 
 const Intro = () => {
 
-    const { isLoggedIn, hide } = useContext(CartContext)
+    const { isLoggedIn, introHide } = useContext(CartContext)
 
     return (
         <>
-            {(isLoggedIn && !hide) && < IntroButtons />}
+            {(isLoggedIn && !introHide) && < IntroButtons />}
         </>
 
     )

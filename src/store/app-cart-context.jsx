@@ -28,21 +28,21 @@ export const CartContext = createContext({
     onSetLoginSucces: ()=>{},		
     onSetRegistrationSucces: ()=>{},		
     setIsLoggedIn: ()=>{},		
-    setButtonClicked: ()=>{},		
-    setHide: ()=>{},	
+    setIntroButtonClicked: ()=>{},		
+    setIntroHide: ()=>{},	
     setBeamClicked: ()=>{},		
     onLoginHandler:()=>{},			
     onRegisterHandler:()=>{},	
     onBeamDesignHandler:()=>{},	
 
     beamClicked:{},
-    hide:{},
+    introHide:{},
     sendEmailInfo: {},		
     loginSucces:{},	
     registrationSucces:{},		
     userDocumentName:{},		
     subscriptions:{},		
-    buttonClicked:{},		
+    introButtonClicked:{},		
     sessionTime:{},		
     subscriptionsTime:{},		
     isLoggedIn:{}	
@@ -55,8 +55,8 @@ export default function ContextProvider ({children}) {
 
 
         const [beamClicked, setBeamClicked] = useState(false)
-        const [hide, setHide] = useState(false)
-        const [buttonClicked, setButtonClicked] = useState(false)
+        const [introHide, setIntroHide] = useState(false)
+        const [introButtonClicked, setIntroButtonClicked] = useState(false)
         const [loginSucces, setLoginSucces] = useState(false)
         const [registrationSucces, setRegistrationSucces] = useState(false)
         const [isLoggedIn, setIsLoggedIn] = useState(false)
@@ -271,9 +271,9 @@ export default function ContextProvider ({children}) {
       
       
         const beamDesignHandler = () => {
-          setButtonClicked(true)                         //blur buttons
-          setTimeout(() => { setHide(true) }, 600)          //cancel components IntroButtons
-          setTimeout(() => { setBeamClicked(true) }, 1400)  //addition component BeamDesign
+          setIntroButtonClicked(true)                         //blur buttons
+          setTimeout(() => { setIntroHide(true) }, 600)          //hide component Intro
+          setTimeout(() => { setBeamClicked(true) }, 1400)  //visible component BeamDesign
         }
       
       
@@ -285,18 +285,18 @@ export default function ContextProvider ({children}) {
           onRegisterHandler: registerHandler,
           onBeamDesignHandler: beamDesignHandler,
           setIsLoggedIn: setIsLoggedIn,
-          setButtonClicked: setButtonClicked,
-          setHide: setHide,
+          setIntroButtonClicked: setIntroButtonClicked,
+          setIntroHide: setIntroHide,
           setBeamClicked: setBeamClicked,
       
           beamClicked:beamClicked,
-          hide:hide,
+          introHide:introHide,
           sendEmailInfo: sendEmailInfo,
           loginSucces: loginSucces,
           registrationSucces: registrationSucces,
           userDocumentName: userDocumentName,
           subscriptions: subscriptions,
-          buttonClicked: buttonClicked,
+          introButtonClicked: introButtonClicked,
           sessionTime: sessionTime,
           subscriptionsTime: subscriptionsTime,
           isLoggedIn: isLoggedIn,
@@ -310,6 +310,3 @@ return <CartContext.Provider value={ctxValue}>
 
 }
 
-export const useVariables = () =>{
-    return useContext(CartContext)
-}

@@ -6,10 +6,10 @@ import { CartContext } from "../../store/app-cart-context"
 
 const MainContainer = ({children}) =>{
 
-const{hide} = useContext(CartContext)
+const{introHide} = useContext(CartContext)
 
     return(
-<div className={`${styles.container} ${hide && styles.fullscreen}`}>
+<div className={`${styles.container} ${introHide && styles.fullscreen}`}>
     {children}
 </div>
 

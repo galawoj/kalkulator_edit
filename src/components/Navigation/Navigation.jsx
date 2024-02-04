@@ -12,17 +12,17 @@ import { CartContext } from '../../store/app-cart-context';
 const Navigation = () => {
 
 const {
-    setHide,
+    setIntroHide,
     setBeamClicked,
-    setButtonClicked,
+    setIntroButtonClicked,
     setIsLoggedIn,
     subscriptions,
     isLoggedIn,
     userDocumentName,
-    buttonClicked
+    introButtonClicked
 } =useContext(CartContext)
 
-    const isTrue = 
+    const isThereAnySubscription = 
       subscriptions.steel ||
       subscriptions.beam ||
       subscriptions.pad;
@@ -30,9 +30,9 @@ const {
     const userEmail = isLoggedIn.email
 
     const closerHandler = () => {
-        setHide(false)
+        setIntroHide(false)
         setBeamClicked(false)
-        setTimeout(() => { setButtonClicked(false) }, 800)  //fade-in buttonów
+        setTimeout(() => { setIntroButtonClicked(false) }, 800)  //fade-in buttonów
     }
 
     const logOutHandler = () => {
@@ -49,7 +49,7 @@ const {
 
     return (
         <nav className={styles.navigation}>
-            {buttonClicked
+            {introButtonClicked
                 ?
                 <button onClick={closerHandler}>Main menu</button>
                 :
@@ -60,7 +60,7 @@ const {
             <div className={styles.informations}>{`Hi ${userEmail.substr(0, userEmail.indexOf('@'))} !`}</div>
 
 
-            {isTrue ? <div className={styles.informations}><h4>Your subscriptions:</h4></div> : null}
+            {isThereAnySubscription ? <div className={styles.informations}><h4>Your subscriptions:</h4></div> : null}
             {subscriptions.steel && (<SubInfo subName={"steel"}>Steel Member Design</SubInfo>)}
             {subscriptions.beam && (<SubInfo subName={"beam"}>Beam Designer</SubInfo>)}
             {subscriptions.pad && (<SubInfo subName={"pad"}>Pad Foundation Design</SubInfo>)}

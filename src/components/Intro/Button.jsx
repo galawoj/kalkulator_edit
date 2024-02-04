@@ -8,7 +8,7 @@ import { CartContext } from "../../store/app-cart-context";
 
 const Button = (props) => {
    
-    const {userDocumentName,buttonClicked} = useContext(CartContext)
+    const {userDocumentName,introButtonClicked} = useContext(CartContext)
 
     const inactiveHandler = async () => {
 
@@ -25,7 +25,7 @@ const Button = (props) => {
     return (
         <button
             onClick={props.isActive ? props.onClick : inactiveHandler}
-            className={`${styles.button} ${!props.isActive && styles.inactive} ${buttonClicked && styles.hidden}`}
+            className={`${styles.button} ${!props.isActive && styles.inactive} ${introButtonClicked && styles.hidden}`}
         >
             <div>
                 {props.children}
