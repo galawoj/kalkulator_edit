@@ -128,6 +128,7 @@ export default function ContextProvider ({children}) {
             })
             .catch((error) => {
               setRegistrationSucces(error)
+              setWaitingForRegistration(false)
             });
       
       
