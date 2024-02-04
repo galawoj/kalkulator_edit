@@ -4,14 +4,15 @@ import { useContext } from 'react'
 import { CartContext } from '../../../../store/beam-cart-context'
 
 
-import styles from './CrossSection.module.css'
+import styles from './Draft.module.css'
+import Loader from "../../../../common/Loader";
 
 
 const Results = () => {
 
     const { dataElement } = useContext(CartContext)
     const [element, setElement] = useState("")
-
+    const [waitingForResult, setWaitingForResult] = useState(false)
 
     function postApi() {
         fetch("https://wgservice-apim.azure-api.net/api", {
@@ -21,6 +22,7 @@ const Results = () => {
                 'Content-Type': 'application/json'
             }
         })
+            .then(setWaitingForResult(true))
             .then((response) => {
                 if (response.ok) {
                     response.json()
@@ -28,15 +30,15 @@ const Results = () => {
 
                             const newElement = data.map(e =>
                                 <div>
-                    
-                                    <div>height={e["height"]} </div> 
-                                   <div>width= {e["width"]} </div> 
+
+                                    <div>height={e["height"]} </div>
+                                    <div>width= {e["width"]} </div>
                                     <div>area= {e["area"]}</div>
                                     <div>perimeter= {e["perimeter"]}</div>
-                                    
+
                                 </div>
                             )
-
+                            setWaitingForResult(false)
                             setElement(newElement)
                             
                             console.log(data)
@@ -47,14 +49,20 @@ const Results = () => {
     }
 
 
-
     return (
-        <div className={styles.results}>
-            
-            <div>
-                <button onClick={postApi}>RESULTS</button>
-                {element}
+        <div className={styles.resultsContainer}>
+
+
+            <button className={styles.button} onClick={postApi}>RESULTS</button>
+
+            <div className={styles.draft}>
+            {waitingForResult ? <Loader/> : element}
             </div>
+                
+                
+         
+
+
 
         </div>
     )

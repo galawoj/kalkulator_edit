@@ -1,7 +1,7 @@
 import { useContext } from 'react'
 import { CartContext } from '../../../../store/beam-cart-context'
 
-import styles from './CrossSection.module.css'
+import styles from './Draft.module.css'
 
 const CrossSection = () => {
 
