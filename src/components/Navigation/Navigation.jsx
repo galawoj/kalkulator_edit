@@ -19,7 +19,8 @@ const {
     subscriptions,
     isLoggedIn,
     userDocumentName,
-    introButtonClicked
+    introButtonClicked,
+    setWaitingForSignIn
 } =useContext(CartContext)
 
     const isThereAnySubscription = 
@@ -38,6 +39,7 @@ const {
     const logOutHandler = () => {
         signOut(auth).then(() => {
             setIsLoggedIn(false)
+            setWaitingForSignIn(false)
         }).catch(error => console.log(error))
         
         updateDoc(doc(db, "users", userDocumentName), {

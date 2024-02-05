@@ -20,10 +20,7 @@ const Login = () => {
             {!isLoggedIn && (!switchForm ? <SignIn onSwitchHandler={switchHandler} /> : <Registration onSwitchHandler={switchHandler} />)}
 
         </>
-
     )
-
-
 }
 
 export default Login

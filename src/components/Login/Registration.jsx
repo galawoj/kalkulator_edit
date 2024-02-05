@@ -5,7 +5,7 @@ import { CartContext } from '../../store/app-cart-context';
 import RegistrationForm from './RegistrationForm';
 import SendEmailAlert from './SendEmailAlert';
 import Loader from '../../common/Loader';
-import style from './Login.module.css'
+
 
 const Registration = (props) => {
 
@@ -15,7 +15,7 @@ const {sendEmailInfo,waitingForRegistration} = useContext(CartContext)
  
     return (
         <>
-        {waitingForRegistration&&<div className={style.loader}><Loader/></div>}
+        {waitingForRegistration&&<Loader/>}
         
         {!sendEmailInfo && !waitingForRegistration && <RegistrationForm onSetEnteredEmail={setEnteredEmail} enteredEmail={enteredEmail} {...props}/>}
         
