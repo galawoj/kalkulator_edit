@@ -1,13 +1,13 @@
 # Content of Project
-* [General info](#general-info)
-* [Technologies](#technologies)
-* [Features](#features)
-* [Project Status](#project-status)
-* [Setup](#setup)
 
-
+- [General info](#general-info)
+- [Technologies](#technologies)
+- [Features](#features)
+- [Project Status](#project-status)
+- [Setup](#setup)
 
 ## General info
+
 Welcome to the Construction Calculators Platform!<br> This application integrates multiple construction calculators, designed to assist construction designers throughout the project design process.
 
 To login you can sign up and create a new account or use the credentials below:
@@ -18,6 +18,7 @@ To login you can sign up and create a new account or use the credentials below:
 </ul>
 
 ## Technologies
+
 <ul>
 <li>React 18.2.0</li>
 <li>Firebase 10.4.0</li>
@@ -34,6 +35,7 @@ Upon registration using email and password, a personal user account is created, 
 </ul>
 
 #### Subscription Model:
+
 <ul>
 <li>To access a specific calculator, users must purchase a subscription by clicking the "Buy 30-day Subscription" button.</li>
 <li>Separate subscriptions are required for each calculator.</li>
@@ -69,7 +71,8 @@ Upon registration using email and password, a personal user account is created, 
 
 ## Project Status
 
-Development of the platform is ongoing, and this is not the final product. 
+Development of the platform is ongoing, and this is not the final product.
+
 <ul>
 <li>Currently, only the "Beam Designer" calculator is available.</li>
 <li>Users incur no costs when "purchasing" a subscription.</li>
@@ -80,9 +83,8 @@ Development of the platform is ongoing, and this is not the final product.
 To run this project, enter the webside <b>https://galawoj.github.io/kalkulator/</b> or clone my repository:
 
 ```
-git clone https://github.com/galawoj/kalkulator_edit
+git clone https://github.com/galawoj/kalkulator_edit.git
 ```
-
 
 ### Starting
 
